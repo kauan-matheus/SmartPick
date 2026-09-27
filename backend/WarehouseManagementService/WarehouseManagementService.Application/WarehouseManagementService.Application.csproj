@@ -7,12 +7,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\connection.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WarehouseManagementService.Communication\WarehouseManagementService.Communication.csproj" />
     <ProjectReference Include="..\WarehouseManagementService.Domain\WarehouseManagementService.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.36.2" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.84.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.84.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\connection.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

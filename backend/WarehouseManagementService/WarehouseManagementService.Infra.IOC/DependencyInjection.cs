@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WarehouseManagementService.Application.Services.Grpc;
 using WarehouseManagementService.Application.Services.Order;
 using WarehouseManagementService.Application.Services.Product;
 using WarehouseManagementService.Application.Services.User;
@@ -26,6 +27,8 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<IGrpcService, GrpcService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             

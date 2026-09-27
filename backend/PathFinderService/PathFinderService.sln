@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.7.11911.148 stable
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37710.0 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Application", "PathFinderService.Application\PathFinderService.Application.csproj", "{4EAA39E1-4C2B-ED1C-9A24-9C73F2B79507}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Infra.IOC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Communication", "PathFinderService.Communication\PathFinderService.Communication.csproj", "{DA5255B6-7BF6-5EC1-A814-C36C6C3E73FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Grpc", "PathFinderService.Grpc\PathFinderService.Grpc.csproj", "{4572494D-05FD-4F97-7BB3-AA6315F8439A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Grpc", "PathFinderService.Grpc\PathFinderService.Grpc.csproj", "{6E5A2EE6-6668-4014-B015-246FBD664D57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +41,15 @@ Global
 		{DA5255B6-7BF6-5EC1-A814-C36C6C3E73FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA5255B6-7BF6-5EC1-A814-C36C6C3E73FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA5255B6-7BF6-5EC1-A814-C36C6C3E73FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4572494D-05FD-4F97-7BB3-AA6315F8439A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4572494D-05FD-4F97-7BB3-AA6315F8439A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4572494D-05FD-4F97-7BB3-AA6315F8439A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4572494D-05FD-4F97-7BB3-AA6315F8439A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {131A4672-413B-42DC-9AF2-BE52ADFECB51}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option csharp_namespace = "PathFinderService.Grpc.Protos";
+
+package connection;
+
+service ConnectionTest {
+  rpc TestConnection (ConnectionRequest) returns (ConnectionReply);
+}
+
+// A messagem de request e vazia ja que esse metodo nao precisa receber nada para retornar algo.
+message ConnectionRequest {}
+
+message ConnectionReply {
+  string message = 1;
+}
