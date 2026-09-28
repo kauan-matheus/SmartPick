@@ -19,6 +19,8 @@ namespace WarehouseManagementService.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetConnection()
         {
             var response = await _service.TesteGrpc();

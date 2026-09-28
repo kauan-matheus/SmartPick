@@ -60,7 +60,7 @@ namespace WarehouseManagementService.Application.Services.Order
         {
             try
             {
-                var result = _repository.ConsultarTasks(id);
+                var result = await _repository.ConsultarTasks(id).ToListAsync();
 
                 if (result == null)
                 {

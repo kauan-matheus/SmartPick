@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WarehouseManagementService.Application.Services;
+using WarehouseManagementService.Application.Services.Auth;
 using WarehouseManagementService.Application.Services.Grpc;
 using WarehouseManagementService.Application.Services.Order;
 using WarehouseManagementService.Application.Services.Product;
-using WarehouseManagementService.Application.Services.User;
 using WarehouseManagementService.Domain.Interfaces;
 using WarehouseManagementService.Infra.Data.Data;
 using WarehouseManagementService.Infra.Data.Repository;
@@ -24,9 +25,11 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<TokenService>();
 
             services.AddScoped<IGrpcService, GrpcService>();
 

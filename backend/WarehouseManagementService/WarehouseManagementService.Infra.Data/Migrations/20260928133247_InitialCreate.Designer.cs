@@ -12,7 +12,7 @@ using WarehouseManagementService.Infra.Data.Data;
 namespace WarehouseManagementService.Infra.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260920020006_InitialCreate")]
+    [Migration("20260928133247_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -95,6 +95,9 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Email")
                         .IsRequired()

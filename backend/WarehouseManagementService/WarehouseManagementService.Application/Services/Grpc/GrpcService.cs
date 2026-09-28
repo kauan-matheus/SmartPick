@@ -26,7 +26,7 @@ namespace WarehouseManagementService.Application.Services.Grpc
             }
             catch
             {
-                return ServiceResponse<string>.Error("Connection nao acessivel");
+                return ServiceResponse<string>.Error("Falha na conexao");
             }
             
         }
