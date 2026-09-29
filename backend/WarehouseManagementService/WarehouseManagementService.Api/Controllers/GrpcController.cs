@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WarehouseManagementService.Application.Services.Grpc;
 
@@ -9,6 +10,7 @@ namespace WarehouseManagementService.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class GrpcController : ControllerBase
     {
         private readonly IGrpcService _service;
