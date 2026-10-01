@@ -21,23 +21,23 @@ namespace WarehouseManagementService.Application.Services.Product
             _unit = unitOfWork;
         }
 
-        public async Task<ServiceResponse<List<ProductModel>>> Consultar()
+        public async Task<ServiceResponse<List<ResponseProductDto>>> Consultar()
         {
             try
             {
                 var query = _repository.Consultar<ProductModel>();
 
-                var users = await query.ToListAsync();
+                var products = await query.ToListAsync();
 
-                return ServiceResponse<List<ProductModel>>.Ok(users);
+                return ServiceResponse<List<ResponseProductDto>>.Ok([.. products.Select(p => p.Dtolize())]);
             }
             catch (Exception ex)
             {
-                return ServiceResponse<List<ProductModel>>.Error(ex.Message);
+                return ServiceResponse<List<ResponseProductDto>>.Error(ex.Message);
             }
         }
 
-        public async Task<ServiceResponse<ProductModel>> ConsultarPorId(Guid id)
+        public async Task<ServiceResponse<ResponseProductDto>> ConsultarPorId(Guid id)
         {
             try
             {
@@ -45,17 +45,17 @@ namespace WarehouseManagementService.Application.Services.Product
 
                 if (result == null)
                 {
-                    return ServiceResponse<ProductModel>.BadRequest("Produto nao existe");
+                    return ServiceResponse<ResponseProductDto>.BadRequest("Produto nao existe");
                 }
 
-                return ServiceResponse<ProductModel>.Ok(result);
+                return ServiceResponse<ResponseProductDto>.Ok(result.Dtolize());
             }
             catch (Exception ex)
             {
-                return ServiceResponse<ProductModel>.Error(ex.Message);
+                return ServiceResponse<ResponseProductDto>.Error(ex.Message);
             }
         }
-        public async Task<ServiceResponse<ProductModel>> Cadastrar(RequestProductDto product)
+        public async Task<ServiceResponse<ResponseProductDto>> Cadastrar(RequestProductDto product)
         {
             await _unit.BeginTransaction();
 
@@ -71,16 +71,16 @@ namespace WarehouseManagementService.Application.Services.Product
                 await _unit.Commit();
                 await _unit.CommitTransaction();
 
-                return ServiceResponse<ProductModel>.Ok(novo);
+                return ServiceResponse<ResponseProductDto>.Ok(novo.Dtolize());
             }
             catch (Exception ex)
             {
                 await _unit.RollbackTransaction();
-                return ServiceResponse<ProductModel>.Error(ex.Message);
+                return ServiceResponse<ResponseProductDto>.Error(ex.Message);
             }
         }
 
-        public async Task<ServiceResponse<ProductModel>> Deletar(Guid id)
+        public async Task<ServiceResponse<ResponseProductDto>> Deletar(Guid id)
         {
 
             try
@@ -89,7 +89,7 @@ namespace WarehouseManagementService.Application.Services.Product
 
                 if (existente == null)
                 {
-                    return ServiceResponse<ProductModel>.BadRequest("Usuario nao existe");
+                    return ServiceResponse<ResponseProductDto>.BadRequest("Usuario nao existe");
                 }
 
                 _repository.Excluir(existente);
@@ -97,14 +97,14 @@ namespace WarehouseManagementService.Application.Services.Product
 
                 if (saved)
                 {
-                    return ServiceResponse<ProductModel>.Ok(existente);
+                    return ServiceResponse<ResponseProductDto>.Ok(existente.Dtolize());
                 }
 
-                return ServiceResponse<ProductModel>.Error("Nao foi possivel deletar esse pedido");
+                return ServiceResponse<ResponseProductDto>.Error("Nao foi possivel deletar esse pedido");
             }
             catch (Exception ex)
             {
-                return ServiceResponse<ProductModel>.Error(ex.Message);
+                return ServiceResponse<ResponseProductDto>.Error(ex.Message);
             }
         }
     }

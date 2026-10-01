@@ -100,13 +100,7 @@ namespace WarehouseManagementService.Application.Services.Auth
             {
                 Token = token,
                 ExpiresIn = "8h",
-                Usuario = new ResponseUserDto
-                {
-                    Id = usuario.Id,
-                    Nome = usuario.Name,
-                    Email = usuario.Email,
-                    Type = usuario.Type
-                }
+                Usuario = usuario.Dtolize()
             });
         }
 
@@ -150,13 +144,7 @@ namespace WarehouseManagementService.Application.Services.Auth
             {
                 Token = token,
                 ExpiresIn = "8h",
-                Usuario = new ResponseUserDto
-                {
-                    Id = usuario.Id,
-                    Nome = usuario.Name,
-                    Email = usuario.Email,
-                    Type = usuario.Type
-                }
+                Usuario = usuario.Dtolize()
             });
         }
     }

@@ -81,8 +81,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Tarefas");
                 });
@@ -125,8 +124,8 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WarehouseManagementService.Domain.Entities.ProductModel", "Product")
-                        .WithOne()
-                        .HasForeignKey("WarehouseManagementService.Domain.Entities.TaskModel", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

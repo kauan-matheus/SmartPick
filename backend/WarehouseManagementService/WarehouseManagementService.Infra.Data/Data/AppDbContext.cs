@@ -24,8 +24,8 @@ namespace WarehouseManagementService.Infra.Data.Data
         {
             modelBuilder.Entity<TaskModel>()
                 .HasOne(t => t.Product)
-                .WithOne()
-                .HasForeignKey<TaskModel>(t => t.ProductId);
+                .WithMany()
+                .HasForeignKey(t => t.ProductId);
             modelBuilder.Entity<TaskModel>()
                 .HasOne(t => t.Order)
                 .WithMany(o => o.Tasks)

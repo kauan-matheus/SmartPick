@@ -10,9 +10,9 @@ namespace WarehouseManagementService.Application.Services.Product
 {
     public interface IProductService
     {
-        Task<ServiceResponse<List<ProductModel>>> Consultar();
-        Task<ServiceResponse<ProductModel>> ConsultarPorId(Guid id);
-        Task<ServiceResponse<ProductModel>> Cadastrar(RequestProductDto productDto);
-        Task<ServiceResponse<ProductModel>> Deletar(Guid id);
+        Task<ServiceResponse<List<ResponseProductDto>>> Consultar();
+        Task<ServiceResponse<ResponseProductDto>> ConsultarPorId(Guid id);
+        Task<ServiceResponse<ResponseProductDto>> Cadastrar(RequestProductDto productDto);
+        Task<ServiceResponse<ResponseProductDto>> Deletar(Guid id);
     }
 }

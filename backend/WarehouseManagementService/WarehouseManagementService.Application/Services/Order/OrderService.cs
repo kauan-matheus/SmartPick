@@ -21,7 +21,7 @@ namespace WarehouseManagementService.Application.Services.Order
             _unit = unitOfWork;
         }
 
-        public async Task<ServiceResponse<List<OrderModel>>> Consultar()
+        public async Task<ServiceResponse<List<ResponseOrderDto>>> Consultar()
         {
             try
             {
@@ -29,30 +29,30 @@ namespace WarehouseManagementService.Application.Services.Order
 
                 var orders = await query.ToListAsync();
 
-                return ServiceResponse<List<OrderModel>>.Ok(orders);
+                return ServiceResponse<List<ResponseOrderDto>>.Ok([.. orders.Select(o => o.Dtolize())]);
             }
             catch (Exception ex)
             {
-                return ServiceResponse<List<OrderModel>>.Error(ex.Message);
+                return ServiceResponse<List<ResponseOrderDto>>.Error(ex.Message);
             }
         }
 
-        public async Task<ServiceResponse<OrderModel>> ConsultarPorId(Guid id)
+        public async Task<ServiceResponse<ResponseOrderDto>> ConsultarPorId(Guid id)
         {
             try
             {
-                var result =  await _repository.ConsultarPorId<OrderModel>(id);
+                var result =  await _repository.ConsultarPorId<ResponseOrderDto>(id);
 
                 if (result == null)
                 {
-                    return ServiceResponse<OrderModel>.BadRequest("Pedido nao existe");
+                    return ServiceResponse<ResponseOrderDto>.BadRequest("Pedido nao existe");
                 }
 
-                return ServiceResponse<OrderModel>.Ok(result);
+                return ServiceResponse<ResponseOrderDto>.Ok(result);
             }
             catch (Exception ex)
             {
-                return ServiceResponse<OrderModel>.Error(ex.Message);
+                return ServiceResponse<ResponseOrderDto>.Error(ex.Message);
             }
         }
 
@@ -74,7 +74,7 @@ namespace WarehouseManagementService.Application.Services.Order
                 return ServiceResponse<List<ResponseTaskDto>>.Error(ex.Message);
             }
         }
-        public async Task<ServiceResponse<OrderModel>> Cadastrar(RequestOrderDto order)
+        public async Task<ServiceResponse<ResponseOrderDto>> Cadastrar(RequestOrderDto order)
         {
             await _unit.BeginTransaction();
 
@@ -86,20 +86,33 @@ namespace WarehouseManagementService.Application.Services.Order
                 };
 
                 await _repository.Cadastrar(novo);
+
+                foreach (var task in order.Tasks)
+                {
+                    var novoTask = new TaskModel
+                    {
+                        Description = task.Description,
+                        Quantity = task.Quantity,
+                        ProductId = task.ProductId,
+                        OrderId = novo.Id
+                    };
+
+                    await _repository.Cadastrar(novoTask);
+                }
                 
                 await _unit.Commit();
                 await _unit.CommitTransaction();
 
-                return ServiceResponse<OrderModel>.Ok(novo);
+                return ServiceResponse<ResponseOrderDto>.Ok(novo.Dtolize());
             }
             catch (Exception ex)
             {
                 await _unit.RollbackTransaction();
-                return ServiceResponse<OrderModel>.Error(ex.Message);
+                return ServiceResponse<ResponseOrderDto>.Error(ex.Message);
             }
         }
 
-        public async Task<ServiceResponse<OrderModel>> Deletar(Guid id)
+        public async Task<ServiceResponse<ResponseOrderDto>> Deletar(Guid id)
         {
 
             try
@@ -108,7 +121,7 @@ namespace WarehouseManagementService.Application.Services.Order
 
                 if (existente == null)
                 {
-                    return ServiceResponse<OrderModel>.BadRequest("Usuario nao existe");
+                    return ServiceResponse<ResponseOrderDto>.BadRequest("Usuario nao existe");
                 }
 
                 _repository.Excluir(existente);
@@ -116,14 +129,14 @@ namespace WarehouseManagementService.Application.Services.Order
 
                 if (saved)
                 {
-                    return ServiceResponse<OrderModel>.Ok(existente);
+                    return ServiceResponse<ResponseOrderDto>.Ok(existente.Dtolize());
                 }
 
-                return ServiceResponse<OrderModel>.Error("Nao foi possivel deletar esse pedido");
+                return ServiceResponse<ResponseOrderDto>.Error("Nao foi possivel deletar esse pedido");
             }
             catch (Exception ex)
             {
-                return ServiceResponse<OrderModel>.Error(ex.Message);
+                return ServiceResponse<ResponseOrderDto>.Error(ex.Message);
             }
         }
     }

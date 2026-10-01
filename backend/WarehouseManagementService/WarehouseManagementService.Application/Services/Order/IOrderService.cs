@@ -10,10 +10,10 @@ namespace WarehouseManagementService.Application.Services.Order
 {
     public interface IOrderService
     {
-        Task<ServiceResponse<List<OrderModel>>> Consultar();
-        Task<ServiceResponse<OrderModel>> ConsultarPorId(Guid id);
+        Task<ServiceResponse<List<ResponseOrderDto>>> Consultar();
+        Task<ServiceResponse<ResponseOrderDto>> ConsultarPorId(Guid id);
         Task<ServiceResponse<List<ResponseTaskDto>>> ConsultarTasks(Guid id);
-        Task<ServiceResponse<OrderModel>> Cadastrar(RequestOrderDto orderDto);
-        Task<ServiceResponse<OrderModel>> Deletar(Guid id);
+        Task<ServiceResponse<ResponseOrderDto>> Cadastrar(RequestOrderDto orderDto);
+        Task<ServiceResponse<ResponseOrderDto>> Deletar(Guid id);
     }
 }

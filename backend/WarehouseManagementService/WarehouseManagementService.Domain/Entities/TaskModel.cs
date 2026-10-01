@@ -22,10 +22,11 @@ namespace WarehouseManagementService.Domain.Entities
         {
             return new ResponseTaskDto
             {
-              Description = Description,
-              Status = Status,
-              Quantity = Quantity,
-              ProductId = ProductId
+                Id = Id,
+                Description = Description,
+                Status = Status,
+                Quantity = Quantity,
+                ProductId = ProductId
             };
         }
     }

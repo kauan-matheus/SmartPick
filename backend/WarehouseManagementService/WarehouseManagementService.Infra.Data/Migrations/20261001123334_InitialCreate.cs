@@ -88,8 +88,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Tarefas_ProductId",
                 table: "Tarefas",
-                column: "ProductId",
-                unique: true);
+                column: "ProductId");
         }
 
         /// <inheritdoc />

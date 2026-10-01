@@ -12,7 +12,7 @@ using WarehouseManagementService.Infra.Data.Data;
 namespace WarehouseManagementService.Infra.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260928133247_InitialCreate")]
+    [Migration("20261001123334_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -84,8 +84,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Tarefas");
                 });
@@ -128,8 +127,8 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WarehouseManagementService.Domain.Entities.ProductModel", "Product")
-                        .WithOne()
-                        .HasForeignKey("WarehouseManagementService.Domain.Entities.TaskModel", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
