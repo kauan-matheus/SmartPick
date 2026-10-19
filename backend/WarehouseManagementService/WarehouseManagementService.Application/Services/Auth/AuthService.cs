@@ -34,7 +34,7 @@ namespace WarehouseManagementService.Application.Services.Auth
             var senhaValida = usuario != null && await Task.Run(() => BCrypt.Net.BCrypt.Verify(auth.Password, usuario.PasswordHash));
 
             if (usuario == null || !senhaValida)
-                return ServiceResponse<ResponseAuthDto>.Unauthorized("Email ou senha inválidos");
+                return ServiceResponse<ResponseAuthDto>.Unauthorized("Email ou senha incorretos");
 
             if (!usuario.Active)
                 return ServiceResponse<ResponseAuthDto>.Unauthorized("Usuário inativo");

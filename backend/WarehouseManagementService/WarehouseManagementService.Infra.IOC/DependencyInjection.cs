@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using WarehouseManagementService.Application.Services.Historic;
 using WarehouseManagementService.Application.Services.Order;
 using WarehouseManagementService.Application.Services.Product;
 using WarehouseManagementService.Domain.Interfaces;
+using WarehouseManagementService.Domain.Validators;
 using WarehouseManagementService.Infra.Data.Data;
 using WarehouseManagementService.Infra.Data.Repository;
 using WarehouseManagementService.Infra.Data.UnitOfWork;
@@ -37,6 +39,8 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             services.AddScoped<IGrpcService, GrpcService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddValidatorsFromAssembly(typeof(AuthLoginValidator).Assembly);
             
             return services;
         }
