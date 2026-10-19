@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WarehouseManagementService.Communication.Dto.Requests;
 using WarehouseManagementService.Communication.Dto.Responses;
+using WarehouseManagementService.Communication.Enums;
 using WarehouseManagementService.Domain.Entities;
 using WarehouseManagementService.Domain.Interfaces;
 
@@ -74,7 +75,7 @@ namespace WarehouseManagementService.Application.Services.Order
                 return ServiceResponse<List<ResponseTaskDto>>.Error(ex.Message);
             }
         }
-        public async Task<ServiceResponse<ResponseOrderDto>> Cadastrar(RequestOrderDto order)
+        public async Task<ServiceResponse<ResponseOrderDto>> Cadastrar(RequestOrderDto order, Guid userId)
         {
             await _unit.BeginTransaction();
 
@@ -87,6 +88,8 @@ namespace WarehouseManagementService.Application.Services.Order
 
                 await _repository.Cadastrar(novo);
 
+                await _repository.Cadastrar(new HistoricOrderModel(novo.Id, EventEnum.ORDERCREATED, userId));
+
                 foreach (var task in order.Tasks)
                 {
                     var novoTask = new TaskModel
@@ -98,6 +101,8 @@ namespace WarehouseManagementService.Application.Services.Order
                     };
 
                     await _repository.Cadastrar(novoTask);
+
+                    await _repository.Cadastrar(new HistoricTaskModel(novoTask.Id, EventEnum.TASKCREATED, userId));
                 }
                 
                 await _unit.Commit();

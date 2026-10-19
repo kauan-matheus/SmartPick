@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WarehouseManagementService.Application.Services;
 using WarehouseManagementService.Application.Services.Auth;
 using WarehouseManagementService.Application.Services.Grpc;
+using WarehouseManagementService.Application.Services.Historic;
 using WarehouseManagementService.Application.Services.Order;
 using WarehouseManagementService.Application.Services.Product;
 using WarehouseManagementService.Domain.Interfaces;
@@ -24,10 +25,12 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IHistoricRepository, HistoricRepository>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IHistoricService, HistoricService>();
 
             services.AddScoped<TokenService>();
 

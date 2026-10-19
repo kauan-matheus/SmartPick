@@ -8,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
 
-Console.WriteLine($"Connection: {connectionString}");
-
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();

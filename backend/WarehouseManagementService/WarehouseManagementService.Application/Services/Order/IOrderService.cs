@@ -13,7 +13,7 @@ namespace WarehouseManagementService.Application.Services.Order
         Task<ServiceResponse<List<ResponseOrderDto>>> Consultar();
         Task<ServiceResponse<ResponseOrderDto>> ConsultarPorId(Guid id);
         Task<ServiceResponse<List<ResponseTaskDto>>> ConsultarTasks(Guid id);
-        Task<ServiceResponse<ResponseOrderDto>> Cadastrar(RequestOrderDto orderDto);
+        Task<ServiceResponse<ResponseOrderDto>> Cadastrar(RequestOrderDto orderDto, Guid userId);
         Task<ServiceResponse<ResponseOrderDto>> Deletar(Guid id);
     }
 }

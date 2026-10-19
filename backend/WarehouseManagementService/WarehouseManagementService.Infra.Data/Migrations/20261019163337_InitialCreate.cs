@@ -80,6 +80,79 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "HistoricoPedidos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Event = table.Column<int>(type: "integer", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoricoPedidos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistoricoPedidos_Pedidos_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Pedidos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HistoricoPedidos_Usuarios_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HistoricoTarefas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Event = table.Column<int>(type: "integer", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TaskId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoricoTarefas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistoricoTarefas_Tarefas_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tarefas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HistoricoTarefas_Usuarios_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoPedidos_OrderId",
+                table: "HistoricoPedidos",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoPedidos_UserId",
+                table: "HistoricoPedidos",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoTarefas_TaskId",
+                table: "HistoricoTarefas",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoTarefas_UserId",
+                table: "HistoricoTarefas",
+                column: "UserId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Tarefas_OrderId",
                 table: "Tarefas",
@@ -94,6 +167,12 @@ namespace WarehouseManagementService.Infra.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "HistoricoPedidos");
+
+            migrationBuilder.DropTable(
+                name: "HistoricoTarefas");
+
             migrationBuilder.DropTable(
                 name: "Tarefas");
 

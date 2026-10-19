@@ -19,6 +19,8 @@ namespace WarehouseManagementService.Infra.Data.Data
         public DbSet<OrderModel> Pedidos { get; set; }
         public DbSet<TaskModel> Tarefas { get; set; }
         public DbSet<ProductModel> Produtos { get; set; }
+        public DbSet<HistoricOrderModel> HistoricoPedidos { get; set; }
+        public DbSet<HistoricTaskModel> HistoricoTarefas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +32,25 @@ namespace WarehouseManagementService.Infra.Data.Data
                 .HasOne(t => t.Order)
                 .WithMany(o => o.Tasks)
                 .HasForeignKey(t => t.OrderId);
+
+            modelBuilder.Entity<HistoricOrderModel>()
+                .HasOne(h => h.Order)
+                .WithMany()
+                .HasForeignKey(h => h.OrderId);
+            modelBuilder.Entity<HistoricOrderModel>()
+                .HasOne(h => h.User)
+                .WithMany()
+                .HasForeignKey(h => h.UserId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<HistoricTaskModel>()
+                .HasOne(h => h.Task)
+                .WithMany()
+                .HasForeignKey(h => h.TaskId);
+            modelBuilder.Entity<HistoricTaskModel>()
+                .HasOne(h => h.User)
+                .WithMany()
+                .HasForeignKey(h => h.UserId);
         }
     }
 }

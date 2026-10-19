@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,9 @@ namespace WarehouseManagementService.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var response = await _service.Cadastrar(orderDto);
+            var userId = GetUserId();
+
+            var response = await _service.Cadastrar(orderDto, userId);
 
             if (response.Success)
                 return StatusCode(response.StatusCode, response.Data);
@@ -88,6 +91,19 @@ namespace WarehouseManagementService.Api.Controllers
                 return StatusCode(response.StatusCode, response.Data);
 
             return StatusCode(response.StatusCode, response.Message);
+        }
+
+        private Guid GetUserId()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+                throw new UnauthorizedAccessException("Usuário não autenticado");
+
+            if (!Guid.TryParse(userId, out var id))
+                throw new Exception("Id do usuário inválido no token");
+
+            return id;
         }
     }
 }
