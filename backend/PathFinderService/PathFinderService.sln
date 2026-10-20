@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37710.0 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11911.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Application", "PathFinderService.Application\PathFinderService.Application.csproj", "{4EAA39E1-4C2B-ED1C-9A24-9C73F2B79507}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Communication", "PathFinderService.Communication\PathFinderService.Communication.csproj", "{DA5255B6-7BF6-5EC1-A814-C36C6C3E73FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Grpc", "PathFinderService.Grpc\PathFinderService.Grpc.csproj", "{6E5A2EE6-6668-4014-B015-246FBD664D57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Domain.Tests", "PathFinderService.Domain.Tests\PathFinderService.Domain.Tests.csproj", "{F19A0FFE-8495-4C47-AB46-47CD2E9DF44E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderService.Visual.Console", "PathFinderService.Visual.Console\PathFinderService.Visual.Console.csproj", "{30002CCD-29DE-4F97-B3EF-E0E22ACA8BD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E5A2EE6-6668-4014-B015-246FBD664D57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F19A0FFE-8495-4C47-AB46-47CD2E9DF44E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F19A0FFE-8495-4C47-AB46-47CD2E9DF44E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F19A0FFE-8495-4C47-AB46-47CD2E9DF44E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F19A0FFE-8495-4C47-AB46-47CD2E9DF44E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30002CCD-29DE-4F97-B3EF-E0E22ACA8BD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30002CCD-29DE-4F97-B3EF-E0E22ACA8BD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30002CCD-29DE-4F97-B3EF-E0E22ACA8BD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30002CCD-29DE-4F97-B3EF-E0E22ACA8BD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\" />
+    <Folder Include="Services\Pathfinding\RouteOptimizer\HeldKarp\" />
     <Folder Include="ValueObjects\" />
   </ItemGroup>
 
