@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "elo · Pedidos",
-  description: "Gestão de pedidos do centro de distribuição",
+  title: "SmartPick",
+  description: "Gestão de pedidos",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
