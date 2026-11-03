@@ -1,4 +1,5 @@
 using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
 using PathFinderService.Grpc.Protos;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,20 @@ namespace WarehouseManagementService.Application.Services.Grpc
 {
     public class GrpcService : IGrpcService
     {
+        private readonly string _pathFinderUrl;
+
+        public GrpcService(IConfiguration configuration)
+        {
+            _pathFinderUrl = configuration["Grpc:PathFinderUrl"] ?? "http://localhost:5003";
+        }
+
         public async Task<ServiceResponse<string>> TesteGrpc()
         {
             try
             {
                 var input = new ConnectionRequest { };
 
-                var channel = GrpcChannel.ForAddress("http://localhost:5003");
+                var channel = GrpcChannel.ForAddress(_pathFinderUrl);
                 var client = new ConnectionTest.ConnectionTestClient(channel);
 
                 var reply = await client.TestConnectionAsync(input);

@@ -76,6 +76,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -95,5 +97,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();
