@@ -1,0 +1,13 @@
+---
+- name: Preparar diretório de deploy
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Criar diretório do SmartPick
+      ansible.builtin.file:
+        path: /opt/smartpick
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: '0750'
