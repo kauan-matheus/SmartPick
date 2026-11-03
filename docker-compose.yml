@@ -18,11 +18,13 @@ services:
 
   pathfinder:
     build: ./backend/PathFinderService
+    image: smartpick/pathfinder:${TAG:-latest}
     restart: unless-stopped
     networks: [backend]
 
   api:
     build: ./backend/WarehouseManagementService
+    image: smartpick/api:${TAG:-latest}
     restart: unless-stopped
     environment:
       ConnectionStrings__Default: Host=db;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
@@ -32,7 +34,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "127.0.0.1:${API_PORT:-5192}:8080"
+      - "${BIND_ADDR:-127.0.0.1}:${API_PORT:-5192}:8080"
     networks: [backend, frontend]
 
   frontend:
@@ -40,11 +42,12 @@ services:
       context: ./frontend
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    image: smartpick/frontend:${TAG:-latest}
     restart: unless-stopped
     depends_on:
       - api
     ports:
-      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+      - "${BIND_ADDR:-127.0.0.1}:${FRONTEND_PORT:-3000}:3000"
     networks: [frontend]
 
 networks:
