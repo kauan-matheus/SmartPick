@@ -1,0 +1,20 @@
+name: jenkins
+
+services:
+  jenkins:
+    build: .
+    restart: unless-stopped
+    group_add:
+      - "${DOCKER_GID}"
+    ports:
+      - "${JENKINS_BIND:-127.0.0.1}:8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:8080/login || exit 1"]
+      interval: 30s
+      start_period: 60s
+
+volumes:
+  jenkins_home:
