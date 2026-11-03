@@ -1,6 +1,7 @@
 import { ClipboardList, ListChecks, User } from "lucide-react";
 
 export const navItems = [
-  { label: "Pedidos", icon: ClipboardList, active: true },
-  { label: "Meus dados", icon: User, active: false },
+  { label: "Pedidos", icon: ClipboardList, href: "/" },
+  { label: "Minhas Tarefas", icon: ListChecks, href: "/minhas-tarefas" },
+  { label: "Meus dados", icon: User },
 ];

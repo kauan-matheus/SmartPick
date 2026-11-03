@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { OrderCard } from "@/components/order-card";
+import {saveTarefasDesignadasID,useTarefasDesignasID,} from "@/lib/assigned-tasks";
 import { orders, type Order } from "@/lib/orders";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,15 @@ function matchesFilter(order: Order, filter: Filter) {
 export function OrdersScreen() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("abertos");
+  const tarefasAtribuidasIds = useTarefasDesignasID();
+
+  function toggleTarefas(orderId: number) {
+    const updatedIds = tarefasAtribuidasIds.includes(orderId)
+      ? tarefasAtribuidasIds.filter((id) => id !== orderId)
+      : [...tarefasAtribuidasIds, orderId];
+
+    saveTarefasDesignadasID(updatedIds);
+  }
 
   const filters: { key: Filter; label: string }[] = [
     {
@@ -118,7 +128,12 @@ export function OrdersScreen() {
       {/* Lista: 1 coluna no celular, 2 no tablet, 3 no desktop */}
       <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visible.map((order) => (
-          <OrderCard key={order.id} order={order} />
+          <OrderCard
+            key={order.id}
+            order={order}
+            isAssigned={tarefasAtribuidasIds.includes(order.id)}
+            onToggleTask={toggleTarefas}
+          />
         ))}
       </div>
 

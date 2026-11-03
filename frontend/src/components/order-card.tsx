@@ -1,30 +1,37 @@
-import { ArrowRight } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { Order, OrderStatus } from "@/lib/orders";
 
 const statusConfig: Record<
   OrderStatus,
-  { label: string; badge: string; action: string }
+  { label: string; badge: string }
 > = {
   alerta: {
     label: "Alerta de prazo",
     badge: "bg-warn-bg text-warn-fg",
-    action: "Ver tarefas",
   },
   aguardando: {
     label: "Aguardando",
     badge: "bg-muted-bg text-neutral-600",
-    action: "Ver pedido",
   },
   concluido: {
     label: "Concluído",
     badge: "bg-orange-soft text-orange",
-    action: "Ver pedido",
   },
 };
 
-export function OrderCard({ order }: { order: Order }) {
+interface OrderCardProps {
+  order: Order;
+  isAssigned: boolean;
+  onToggleTask: (orderId: number) => void;
+}
+
+export function OrderCard({
+  order,
+  isAssigned,
+  onToggleTask,
+}: OrderCardProps) {
   const status = statusConfig[order.status];
 
   return (
@@ -55,9 +62,18 @@ export function OrderCard({ order }: { order: Order }) {
 
       <div className="mt-auto flex items-center justify-between border-t pt-3 text-sm">
         <span className="font-semibold">{order.units} unidades</span>
-        <button className="flex items-center gap-1 font-semibold text-orange">
-          {status.action}
-          <ArrowRight className="size-4" />
+        <button
+          type="button"
+          aria-pressed={isAssigned}
+          onClick={() => onToggleTask(order.id)}
+          className="flex items-center gap-1 font-semibold text-orange hover:underline"
+        >
+          {isAssigned ? "Na minha lista" : "Adicionar tarefa"}
+          {isAssigned ? (
+            <Check className="size-4" />
+          ) : (
+            <Plus className="size-4" />
+          )}
         </button>
       </div>
     </Card>
