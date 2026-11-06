@@ -1,4 +1,5 @@
-import { Check, Plus } from "lucide-react";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { Order, OrderStatus } from "@/lib/orders";
@@ -23,15 +24,9 @@ const statusConfig: Record<
 
 interface OrderCardProps {
   order: Order;
-  isAssigned: boolean;
-  onToggleTask: (orderId: number) => void;
 }
 
-export function OrderCard({
-  order,
-  isAssigned,
-  onToggleTask,
-}: OrderCardProps) {
+export function OrderCard({ order }: OrderCardProps) {
   const status = statusConfig[order.status];
 
   return (
@@ -62,19 +57,13 @@ export function OrderCard({
 
       <div className="mt-auto flex items-center justify-between border-t pt-3 text-sm">
         <span className="font-semibold">{order.units} unidades</span>
-        <button
-          type="button"
-          aria-pressed={isAssigned}
-          onClick={() => onToggleTask(order.id)}
+        <Link
+          href={`/tarefas-designadas/${order.id}`}
           className="flex items-center gap-1 font-semibold text-orange hover:underline"
         >
-          {isAssigned ? "Na minha lista" : "Adicionar tarefa"}
-          {isAssigned ? (
-            <Check className="size-4" />
-          ) : (
-            <Plus className="size-4" />
-          )}
-        </button>
+          Ver pedido
+          <Eye className="size-4" />
+        </Link>
       </div>
     </Card>
   );

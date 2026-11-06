@@ -6,11 +6,24 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { OrderCard } from "@/components/order-card";
-import {saveTarefasDesignadasID,useTarefasDesignasID,} from "@/lib/assigned-tasks";
 import { orders, type Order } from "@/lib/orders";
 import { cn } from "@/lib/utils";
 
-type Filter = "abertos" | "alerta" | "concluidos";
+type Filter = "todos" | "abertos" | "alerta" | "concluidos";
+type SortOrder =
+  | "priority"
+  | "completion"
+  | "id-ascending"
+  | "id-descending";
+
+function isSortOrder(value: string): value is SortOrder {
+  return (
+    value === "priority" ||
+    value === "completion" ||
+    value === "id-ascending" ||
+    value === "id-descending"
+  );
+}
 
 const priority: Record<Order["status"], number> = {
   alerta: 0,
@@ -20,6 +33,8 @@ const priority: Record<Order["status"], number> = {
 
 function matchesFilter(order: Order, filter: Filter) {
   switch (filter) {
+    case "todos":
+      return true;
     case "abertos":
       return order.status !== "concluido";
     case "alerta":
@@ -32,17 +47,13 @@ function matchesFilter(order: Order, filter: Filter) {
 export function OrdersScreen() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("abertos");
-  const tarefasAtribuidasIds = useTarefasDesignasID();
-
-  function toggleTarefas(orderId: number) {
-    const updatedIds = tarefasAtribuidasIds.includes(orderId)
-      ? tarefasAtribuidasIds.filter((id) => id !== orderId)
-      : [...tarefasAtribuidasIds, orderId];
-
-    saveTarefasDesignadasID(updatedIds);
-  }
+  const [sortOrder, setSortOrder] = useState<SortOrder>("priority");
 
   const filters: { key: Filter; label: string }[] = [
+    {
+      key: "todos",
+      label: `Todos · ${orders.length}`,
+    },
     {
       key: "abertos",
       label: `Em aberto · ${orders.filter((o) => matchesFilter(o, "abertos")).length}`,
@@ -61,10 +72,29 @@ export function OrdersScreen() {
         .toLowerCase()
         .includes(query.toLowerCase())
     )
-    .sort((a, b) => priority[a.status] - priority[b.status]);
+    .sort((a, b) => {
+      switch (sortOrder) {
+        case "id-ascending":
+          return a.id - b.id;
+        case "id-descending":
+          return b.id - a.id;
+        case "completion":
+          return (
+            Number(b.status === "concluido") -
+              Number(a.status === "concluido") ||
+            priority[a.status] - priority[b.status]
+          );
+        case "priority":
+          return priority[a.status] - priority[b.status];
+      }
+    });
 
   const countLabel =
-    filter === "concluidos" ? "pedidos concluídos" : "pedidos em aberto";
+    filter === "todos"
+      ? "pedidos"
+      : filter === "concluidos"
+        ? "pedidos concluídos"
+        : "pedidos em aberto";
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-5 md:px-8 md:pb-10 md:pt-8">
@@ -119,21 +149,31 @@ export function OrdersScreen() {
         <span>
           {visible.length} {countLabel}
         </span>
-        <span className="flex items-center gap-1">
+        <label className="flex items-center gap-1">
           <ArrowDownWideNarrow className="size-3.5" />
-          Por prioridade
-        </span>
+          <span className="sr-only">Ordenar pedidos</span>
+          <select
+            aria-label="Ordenar pedidos"
+            value={sortOrder}
+            onChange={(event) => {
+              if (isSortOrder(event.target.value)) {
+                setSortOrder(event.target.value);
+              }
+            }}
+            className="cursor-pointer rounded-md border-0 bg-transparent py-1 text-xs text-neutral-500 outline-none focus-visible:ring-2 focus-visible:ring-orange"
+          >
+            <option value="priority">Por prioridade</option>
+            <option value="completion">Por conclusão</option>
+            <option value="id-ascending">Pedidos crescentes</option>
+            <option value="id-descending">Pedidos decrescentes</option>
+          </select>
+        </label>
       </div>
 
       {/* Lista: 1 coluna no celular, 2 no tablet, 3 no desktop */}
       <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visible.map((order) => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            isAssigned={tarefasAtribuidasIds.includes(order.id)}
-            onToggleTask={toggleTarefas}
-          />
+          <OrderCard key={order.id} order={order} />
         ))}
       </div>
 

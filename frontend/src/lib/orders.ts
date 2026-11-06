@@ -6,18 +6,24 @@ export interface Order {
   recipient: string;
   carrier: string;
   pickup: string;
+  lightTasks: number;
+  heavyTasks: number;
   units: number;
   status: OrderStatus;
 }
 
-export const orders: Order[] = [
+type OrderWithoutUnitTotal = Omit<Order, "units">;
+
+// TODO(task-counts): Aqui é onde fica a exibição dos valores estáticos da tela de Tarefas Designadas.
+const orderTaskCounts: OrderWithoutUnitTotal[] = [
   {
     id: 1048,
     category: "Eletrodomésticos",
     recipient: "Loja Nova Casa · Guarulhos",
     carrier: "TransRápido",
     pickup: "11h30",
-    units: 30,
+    lightTasks: 18,
+    heavyTasks: 12,
     status: "alerta",
   },
   {
@@ -26,7 +32,8 @@ export const orders: Order[] = [
     recipient: "Casa & Cia · São Paulo",
     carrier: "Expresso Sul",
     pickup: "14h",
-    units: 18,
+    lightTasks: 12,
+    heavyTasks: 6,
     status: "aguardando",
   },
   {
@@ -35,7 +42,8 @@ export const orders: Order[] = [
     recipient: "Mobiliar · Osasco",
     carrier: "TransRápido",
     pickup: "15h",
-    units: 12,
+    lightTasks: 8,
+    heavyTasks: 4,
     status: "aguardando",
   },
   {
@@ -44,7 +52,8 @@ export const orders: Order[] = [
     recipient: "Tech Center · Santo André",
     carrier: "Rota Norte",
     pickup: "10h",
-    units: 45,
+    lightTasks: 30,
+    heavyTasks: 15,
     status: "alerta",
   },
   {
@@ -53,7 +62,13 @@ export const orders: Order[] = [
     recipient: "Lar Doce Lar · Campinas",
     carrier: "Expresso Sul",
     pickup: "9h",
-    units: 60,
+    lightTasks: 40,
+    heavyTasks: 20,
     status: "concluido",
   },
 ];
+
+export const orders: Order[] = orderTaskCounts.map((order) => ({
+  ...order,
+  units: order.lightTasks + order.heavyTasks,
+}));
