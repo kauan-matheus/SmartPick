@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -24,14 +25,10 @@ interface AssignedTaskDetailsProps {
 type TaskType = "light" | "heavy";
 
 export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
+  const router = useRouter();
   const [selectedTaskType, setSelectedTaskType] = useState<TaskType | null>(null);
-  const [startedTaskType, setStartedTaskType] = useState<TaskType | null>(null);
   const completed = order.status === "concluido";
-  const statusLabel = completed
-    ? "Concluída"
-    : startedTaskType
-      ? `Coleta de tarefa ${startedTaskType === "light" ? "leve" : "pesada"} em andamento`
-      : "Não iniciada";
+  const statusLabel = completed ? "Concluída" : "Não iniciada";
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-10 pt-5 md:px-8 md:pb-10 md:pt-8">
@@ -91,7 +88,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             type="button"
             variant="outline"
             aria-pressed={selectedTaskType === "light"}
-            disabled={completed || startedTaskType !== null}
+            disabled={completed}
             onClick={() => setSelectedTaskType("light")}
             className={`h-auto min-h-32 flex-col items-start justify-between rounded-2xl p-4 text-left whitespace-normal ${
               selectedTaskType === "light"
@@ -107,11 +104,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               <span className="block text-2xl font-bold">{order.lightTasks}</span>
               <span className="mt-1 block text-sm font-semibold">Tarefas leves</span>
               <span className="mt-1 block text-xs text-neutral-500">
-                {startedTaskType === "light"
-                  ? "Coleta iniciada"
-                  : selectedTaskType === "light"
-                    ? "Selecionada"
-                    : "Toque para selecionar"}
+                {selectedTaskType === "light" ? "Selecionada" : "Toque para selecionar"}
               </span>
             </span>
           </Button>
@@ -120,7 +113,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             type="button"
             variant="outline"
             aria-pressed={selectedTaskType === "heavy"}
-            disabled={completed || startedTaskType !== null}
+            disabled={completed}
             onClick={() => setSelectedTaskType("heavy")}
             className={`h-auto min-h-32 flex-col items-start justify-between rounded-2xl p-4 text-left whitespace-normal ${
               selectedTaskType === "heavy"
@@ -136,11 +129,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               <span className="block text-2xl font-bold">{order.heavyTasks}</span>
               <span className="mt-1 block text-sm font-semibold">Tarefas pesadas</span>
               <span className="mt-1 block text-xs text-neutral-500">
-                {startedTaskType === "heavy"
-                  ? "Coleta iniciada"
-                  : selectedTaskType === "heavy"
-                    ? "Selecionada"
-                    : "Toque para selecionar"}
+                {selectedTaskType === "heavy" ? "Selecionada" : "Toque para selecionar"}
               </span>
             </span>
           </Button>
@@ -164,7 +153,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             <Badge
               variant="secondary"
               className={
-                completed || startedTaskType
+                completed
                   ? "bg-orange-soft text-orange"
                   : "bg-muted-bg text-neutral-600"
               }
@@ -201,19 +190,16 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
 
         <Button
           type="button"
-          disabled={completed || startedTaskType !== null || selectedTaskType === null}
-          onClick={() => setStartedTaskType(selectedTaskType)}
+          disabled={completed || selectedTaskType === null}
+          onClick={() =>
+            router.push(`/coleta-guiada/${order.id}?tipo=${selectedTaskType}`)
+          }
           className="mt-4 h-12 w-full rounded-xl bg-orange text-base font-semibold text-white hover:bg-orange/90"
         >
           {completed ? (
             <>
               <Check className="size-5" />
               Coleta concluída
-            </>
-          ) : startedTaskType ? (
-            <>
-              <Check className="size-5" />
-              Coleta iniciada
             </>
           ) : (
             <>
