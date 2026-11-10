@@ -46,9 +46,10 @@ internal class Program
 
         var rst = HeldKarp.FindBestRoute(matrizDistanciasResult, out var result, out var matrix);
 
-        foreach ( var r in rst)
+        foreach ( var r in rst[1..^1])
         {
-            Console.WriteLine(r);
+            //Console.WriteLine(r);
+            Console.WriteLine(request.Pickups[r-1]);
         }
 
 
