@@ -1,5 +1,6 @@
 ﻿using PathFinderService.Domain.Services.Pathfinding.DistanceMatrix;
 using PathFinderService.Domain.Services.Pathfinding.PathfindingAlgorithm.Dijkstra;
+using PathFinderService.Domain.Services.Pathfinding.RouteOptimizer;
 
 internal class Program
 {
@@ -30,14 +31,46 @@ internal class Program
             Pickups = new List<(string Nome, (int x, int y) Posicao)>
             {
                 ("P1",(3, 3)),
-                ("P2",(6, 7))
+                ("P2",(6, 7)),
+                ("P3",(5, 4)),
             }
         };
 
+        var matrizDistancias = new DistanceMatrix(
+               new DijkstraV2_Test()
+           );
 
-        PrintaMatrizDistancia(request);
+        var matrizDistanciasResult = matrizDistancias.DistanceMatrixProvider(request);
+       // PrintaMatrizDistancia(request);
 
 
+        var rst = HeldKarp.FindBestRoute(matrizDistanciasResult, out var result, out var matrix);
+
+        foreach ( var r in rst)
+        {
+            Console.WriteLine(r);
+        }
+
+
+    }
+
+    static void PrintMatrix(long[,] matrix)
+    {
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                if (matrix[i, j] > 10000)
+                {
+                    Console.Write(" inf ");
+                    continue;
+                }
+
+                Console.Write($"{matrix[i, j],4}");
+            }
+
+            Console.WriteLine();
+        }
     }
 
     public static void PrintaMatrizDistancia(Request rqst)
