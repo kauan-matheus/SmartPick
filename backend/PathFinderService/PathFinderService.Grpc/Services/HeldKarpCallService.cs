@@ -20,7 +20,7 @@ namespace PathFinderService.Grpc.Services
                 new DijkstraV2_Test()
             );
 
-            var matrixRequest = ConvertRequest(request);
+            var matrixRequest = ToRequest(request);
 
             var matrizDistanciasResult = matrizDistancias.DistanceMatrixProvider(matrixRequest);
 
@@ -36,7 +36,7 @@ namespace PathFinderService.Grpc.Services
             return Task.FromResult(reply);
         }
 
-        private Request ConvertRequest(CallRequest request)
+        private Request ToRequest(CallRequest request)
         {
             int width = request.Map.Width;
             int height = request.Map.Height;
