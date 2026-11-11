@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Protos\connection.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\Shared.Communication\Shared.Communication.csproj" />
     <ProjectReference Include="..\WarehouseManagementService.Communication\WarehouseManagementService.Communication.csproj" />
     <ProjectReference Include="..\WarehouseManagementService.Domain\WarehouseManagementService.Domain.csproj" />
   </ItemGroup>
@@ -18,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="Google.Protobuf" Version="3.36.2" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.84.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.85.0" />
     <PackageReference Include="Grpc.Tools" Version="2.84.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,11 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="protos\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="Protos\connection.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\Shared.Communication\Protos\connection.proto" GrpcServices="Client" Access="Public" />
+    <Protobuf Include="..\..\Shared.Communication\Protos\HeldKarpCall.proto" GrpcServices="Client" Access="Public" />
   </ItemGroup>
 
 </Project>

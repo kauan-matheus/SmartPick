@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared.Communication.Protos";
+
+package HeldKarpCall;
+
+service HeldKarpCall {
+  rpc HeldCarpCall (CallRequest) returns (CallReply);
+}
+
+message Map {
+    int32 width = 1;
+    int32 height = 2;
+    repeated int32 cells = 3;
+}
+
+message Position {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message Pickup {
+    string name = 1;
+    Position position = 2;
+}
+
+message CallRequest {
+	Map map = 1;
+    Position start = 2;
+    Position end = 3;
+    repeated Pickup pickups = 4;
+}
+
+
+
+message CallReply {
+  repeated int32 path = 1;
+}

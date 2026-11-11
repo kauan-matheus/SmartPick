@@ -1,5 +1,5 @@
 ﻿using Grpc.Core;
-using PathFinderService.Grpc.Protos;
+using Shared.Communication.Protos;
 
 namespace PathFinderService.Grpc.Services
 {

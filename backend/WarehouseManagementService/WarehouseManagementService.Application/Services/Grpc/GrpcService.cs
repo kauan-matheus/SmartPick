@@ -1,6 +1,7 @@
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
-using PathFinderService.Grpc.Protos;
+using Shared.Communication.Dto.Request;
+using Shared.Communication.Protos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace WarehouseManagementService.Application.Services.Grpc
         {
             try
             {
-                var input = new ConnectionRequest { };
+                var input = new ConnectionRequest{ };
 
                 var channel = GrpcChannel.ForAddress(_pathFinderUrl);
                 var client = new ConnectionTest.ConnectionTestClient(channel);
@@ -37,6 +38,71 @@ namespace WarehouseManagementService.Application.Services.Grpc
                 return ServiceResponse<string>.Error("Falha na conexao");
             }
             
+        }
+
+        public async Task<ServiceResponse<List<int>>> HeldKarp(RequestPathDto request)
+        {
+            try
+            {
+
+                var matriz = ToMatriz(request.Map);
+
+                int height = matriz.GetLength(0); // linhas
+                int width  = matriz.GetLength(1); // colunas
+                var map = new Map
+                {
+                    Width = width,
+                    Height = height
+                };
+
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        map.Cells.Add(matriz[y, x] == "#" ? 1 : 0);
+                    }
+                }
+
+                var input = new CallRequest
+                {
+                    Map = map,
+                    Start = new Position { X = request.Start.X, Y = request.Start.Y },
+                    End = new Position { X = request.End.Y, Y = request.End.Y }
+                };
+
+                foreach (var pickup in request.Pickups)
+                {
+                    input.Pickups.Add(new Pickup
+                    {
+                        Name = pickup.Nome,
+                        Position = new Position { X = pickup.Posicao.X, Y = pickup.Posicao.Y }
+                    });
+                }
+
+                var channel = GrpcChannel.ForAddress(_pathFinderUrl);
+                var client = new HeldKarpCall.HeldKarpCallClient(channel);
+
+                var reply = await client.HeldCarpCallAsync(input);
+
+                return ServiceResponse<List<int>>.Ok(reply.Path.ToList());
+            }
+            catch (Exception ex)
+            {
+                return ServiceResponse<List<int>>.Error(ex.Message);
+            }
+        }
+
+        public static string[,] ToMatriz(string[][] jagged)
+        {
+            int h = jagged.Length;
+            int w = jagged[0].Length;
+            var m = new string[h, w];
+
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                    m[y, x] = jagged[y][x];
+
+            return m;
         }
     }
 }

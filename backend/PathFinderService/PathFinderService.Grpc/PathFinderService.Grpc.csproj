@@ -7,15 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Protos\connection.proto" />
+    <Protobuf Include="..\..\Shared.Communication\Protos\connection.proto" GrpcServices="Server" Access="Public" />
+    <Protobuf Include="..\..\Shared.Communication\Protos\HeldKarpCall.proto" GrpcServices="Server" Access="Public" />
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\connection.proto" GrpcServices="Server" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.36.2" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.64.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.85.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PathFinderService.Domain\PathFinderService.Domain.csproj" />
   </ItemGroup>
 
 </Project>
