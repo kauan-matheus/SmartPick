@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/app-header";
+import { AuthGuard } from "@/components/auth-guard";
 import { GuidedPicking } from "@/components/guided-picking";
 import { Sidebar } from "@/components/sidebar";
 import { orders } from "@/lib/orders";
@@ -22,13 +23,15 @@ export default async function GuidedPickingPage({
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100 md:flex">
-      <Sidebar />
+    <AuthGuard>
+      <div className="min-h-screen bg-neutral-100 md:flex">
+        <Sidebar />
 
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
-        <AppHeader />
-        <GuidedPicking order={order} taskType={tipo} />
+        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+          <AppHeader />
+          <GuidedPicking order={order} taskType={tipo} />
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 }

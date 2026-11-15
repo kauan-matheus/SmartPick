@@ -101,9 +101,11 @@ export function OrdersScreen() {
       {/* Título + avatar */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold md:text-3xl">Pedidos</h1>
+          <h1 className="text-2xl font-bold md:text-3xl">
+            Tarefas designadas
+          </h1>
           <p className="mt-1 text-sm text-neutral-500">
-            Bom trabalho, João · Turno da manhã
+            Sua fila de trabalho
           </p>
         </div>
         <Avatar className="size-10 bg-orange-soft">

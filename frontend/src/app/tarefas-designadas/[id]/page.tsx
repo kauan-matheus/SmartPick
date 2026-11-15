@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/app-header";
+import { AuthGuard } from "@/components/auth-guard";
 import { AssignedTaskDetails } from "@/components/assigned-task-details";
 import { Sidebar } from "@/components/sidebar";
 import { orders } from "@/lib/orders";
@@ -19,13 +20,15 @@ export default async function AssignedTaskPage({
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100 md:flex">
-      <Sidebar />
+    <AuthGuard>
+      <div className="min-h-screen bg-neutral-100 md:flex">
+        <Sidebar />
 
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
-        <AppHeader />
-        <AssignedTaskDetails order={order} />
+        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+          <AppHeader />
+          <AssignedTaskDetails order={order} />
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 }
