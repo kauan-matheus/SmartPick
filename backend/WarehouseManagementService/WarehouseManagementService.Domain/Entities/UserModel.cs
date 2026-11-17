@@ -16,7 +16,7 @@ namespace WarehouseManagementService.Domain.Entities
         public UserTypeEnum Type { get; set; }
         public bool Active { get; set; } = true;
 
-        public ResponseUserDto Dtolize()
+        public ResponseUserDto ToDto()
         {
             return new ResponseUserDto
             {

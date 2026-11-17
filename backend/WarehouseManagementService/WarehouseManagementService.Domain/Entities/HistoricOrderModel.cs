@@ -31,7 +31,7 @@ namespace WarehouseManagementService.Domain.Entities
             UserId = userId;
         }
 
-        public ResponseHistoricOrderDto Dtolize()
+        public ResponseHistoricOrderDto ToDto()
         {
             return new ResponseHistoricOrderDto
             {

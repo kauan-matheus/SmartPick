@@ -22,7 +22,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricOrder", b =>
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricOrderModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.ToTable("HistoricoPedidos");
                 });
 
-            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricTask", b =>
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricTaskModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,12 +82,23 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("DataColeta")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Destinatario")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Transportadora")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -99,6 +110,9 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Access")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -169,7 +183,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricOrder", b =>
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricOrderModel", b =>
                 {
                     b.HasOne("WarehouseManagementService.Domain.Entities.OrderModel", "Order")
                         .WithMany()
@@ -186,7 +200,7 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricTask", b =>
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.HistoricTaskModel", b =>
                 {
                     b.HasOne("WarehouseManagementService.Domain.Entities.TaskModel", "Task")
                         .WithMany()

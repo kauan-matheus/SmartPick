@@ -12,17 +12,24 @@ namespace WarehouseManagementService.Domain.Entities
     {
         public Guid Id { get; set; }
         public string Description { get; set; } = string.Empty;
+        public string Destinatario { get; set; } = string.Empty;
+        public string Transportadora { get; set; } = string.Empty;
+        public DateTime DataColeta { get; set; } = DateTime.UtcNow;
         public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
         public StatusEnum Status { get; set; }
 
-        public ResponseOrderDto Dtolize()
+        public ResponseOrderDto ToDto()
         {
             return new ResponseOrderDto
             {
                 Id = Id,
                 Description = Description,
+                Destinatario = Destinatario,
+                Transportadora = Transportadora,
+                DataColeta = DataColeta,
+                TotalProdutos = Tasks.Sum(t => t.Quantity),
                 Status = Status,
-                Tasks = [.. Tasks.Select(t => t.Dtolize())]
+                Tasks = [.. Tasks.Select(t => t.ToDto())]
             };
         }
     }

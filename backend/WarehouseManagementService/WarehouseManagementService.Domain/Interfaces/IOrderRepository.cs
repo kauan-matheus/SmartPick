@@ -8,6 +8,7 @@ namespace WarehouseManagementService.Domain.Interfaces
 {
     public interface IOrderRepository : IRepository
     {
+        IQueryable<OrderModel> Consultar();
         IQueryable<TaskModel> ConsultarTasks(Guid id);
     }
 }

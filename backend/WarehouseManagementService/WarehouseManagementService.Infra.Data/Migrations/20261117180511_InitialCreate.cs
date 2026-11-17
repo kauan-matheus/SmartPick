@@ -17,6 +17,9 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    Destinatario = table.Column<string>(type: "text", nullable: false),
+                    Transportadora = table.Column<string>(type: "text", nullable: false),
+                    DataColeta = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -29,7 +32,8 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Access = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

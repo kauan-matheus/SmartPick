@@ -29,7 +29,7 @@ namespace WarehouseManagementService.Application.Services.Product
 
                 var products = await query.ToListAsync();
 
-                return ServiceResponse<List<ResponseProductDto>>.Ok([.. products.Select(p => p.Dtolize())]);
+                return ServiceResponse<List<ResponseProductDto>>.Ok([.. products.Select(p => p.ToDto())]);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace WarehouseManagementService.Application.Services.Product
                     return ServiceResponse<ResponseProductDto>.BadRequest("Produto nao existe");
                 }
 
-                return ServiceResponse<ResponseProductDto>.Ok(result.Dtolize());
+                return ServiceResponse<ResponseProductDto>.Ok(result.ToDto());
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace WarehouseManagementService.Application.Services.Product
                 await _unit.Commit();
                 await _unit.CommitTransaction();
 
-                return ServiceResponse<ResponseProductDto>.Ok(novo.Dtolize());
+                return ServiceResponse<ResponseProductDto>.Ok(novo.ToDto());
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace WarehouseManagementService.Application.Services.Product
 
                 if (saved)
                 {
-                    return ServiceResponse<ResponseProductDto>.Ok(existente.Dtolize());
+                    return ServiceResponse<ResponseProductDto>.Ok(existente.ToDto());
                 }
 
                 return ServiceResponse<ResponseProductDto>.Error("Nao foi possivel deletar esse pedido");

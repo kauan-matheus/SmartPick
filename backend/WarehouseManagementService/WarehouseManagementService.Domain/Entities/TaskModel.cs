@@ -18,7 +18,7 @@ namespace WarehouseManagementService.Domain.Entities
         public Guid ProductId { get; set; }
         public ProductModel Product { get; set; } = null!;
 
-        public ResponseTaskDto Dtolize()
+        public ResponseTaskDto ToDto()
         {
             return new ResponseTaskDto
             {

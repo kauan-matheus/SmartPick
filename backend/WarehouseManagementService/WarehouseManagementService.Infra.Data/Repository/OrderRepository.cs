@@ -15,6 +15,11 @@ namespace WarehouseManagementService.Infra.Data.Repository
         {
         }
 
+        public IQueryable<OrderModel> Consultar()
+        {
+            return _context.Pedidos.AsQueryable().Include(p => p.Tasks); 
+        }
+
         public IQueryable<TaskModel> ConsultarTasks(Guid id)
         {
             return _context.Tarefas

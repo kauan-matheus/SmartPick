@@ -25,7 +25,7 @@ namespace WarehouseManagementService.Application.Services.Historic
             {
                 var result = await _repository.ConsultarOrders().ToListAsync();
 
-                return ServiceResponse<List<ResponseHistoricOrderDto>>.Ok([.. result.Select(t => t.Dtolize())]);
+                return ServiceResponse<List<ResponseHistoricOrderDto>>.Ok([.. result.Select(t => t.ToDto())]);
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace WarehouseManagementService.Application.Services.Historic
             {
                 var result = await _repository.ConsultarTasks().ToListAsync();
 
-                return ServiceResponse<List<ResponseHistoricTaskDto>>.Ok([.. result.Select(t => t.Dtolize())]);
+                return ServiceResponse<List<ResponseHistoricTaskDto>>.Ok([.. result.Select(t => t.ToDto())]);
             }
             catch (Exception ex)
             {

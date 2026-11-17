@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +27,11 @@ namespace WarehouseManagementService.Application.Services.Order
         {
             try
             {
-                var query = _repository.Consultar<OrderModel>();
+                var query = _repository.Consultar();
 
                 var orders = await query.ToListAsync();
 
-                return ServiceResponse<List<ResponseOrderDto>>.Ok([.. orders.Select(o => o.Dtolize())]);
+                return ServiceResponse<List<ResponseOrderDto>>.Ok([.. orders.Select(o => o.ToDto())]);
             }
             catch (Exception ex)
             {
@@ -42,14 +43,14 @@ namespace WarehouseManagementService.Application.Services.Order
         {
             try
             {
-                var result =  await _repository.ConsultarPorId<ResponseOrderDto>(id);
+                var result =  await _repository.ConsultarPorId<OrderModel>(id);
 
                 if (result == null)
                 {
                     return ServiceResponse<ResponseOrderDto>.BadRequest("Pedido nao existe");
                 }
 
-                return ServiceResponse<ResponseOrderDto>.Ok(result);
+                return ServiceResponse<ResponseOrderDto>.Ok(result.ToDto());
             }
             catch (Exception ex)
             {
@@ -68,7 +69,7 @@ namespace WarehouseManagementService.Application.Services.Order
                     return ServiceResponse<List<ResponseTaskDto>>.BadRequest("Pedido nao existe");
                 }
 
-                return ServiceResponse<List<ResponseTaskDto>>.Ok([.. result.Select(t => t.Dtolize())]);
+                return ServiceResponse<List<ResponseTaskDto>>.Ok([.. result.Select(t => t.ToDto())]);
             }
             catch (Exception ex)
             {
@@ -83,7 +84,10 @@ namespace WarehouseManagementService.Application.Services.Order
             {
                 var novo = new OrderModel
                 {
-                    Description = order.Description
+                    Description = order.Description,
+                    Destinatario = order.Destinatario,
+                    Transportadora = order.Transportadora,
+                    DataColeta = order.DataColeta
                 };
 
                 await _repository.Cadastrar(novo);
@@ -108,7 +112,7 @@ namespace WarehouseManagementService.Application.Services.Order
                 await _unit.Commit();
                 await _unit.CommitTransaction();
 
-                return ServiceResponse<ResponseOrderDto>.Ok(novo.Dtolize());
+                return ServiceResponse<ResponseOrderDto>.Ok(novo.ToDto());
             }
             catch (Exception ex)
             {
@@ -134,7 +138,7 @@ namespace WarehouseManagementService.Application.Services.Order
 
                 if (saved)
                 {
-                    return ServiceResponse<ResponseOrderDto>.Ok(existente.Dtolize());
+                    return ServiceResponse<ResponseOrderDto>.Ok(existente.ToDto());
                 }
 
                 return ServiceResponse<ResponseOrderDto>.Error("Nao foi possivel deletar esse pedido");

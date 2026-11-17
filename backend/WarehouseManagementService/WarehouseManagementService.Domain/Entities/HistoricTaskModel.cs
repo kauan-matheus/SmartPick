@@ -26,7 +26,7 @@ namespace WarehouseManagementService.Domain.Entities
             UserId = userId;
         }
 
-        public ResponseHistoricTaskDto Dtolize()
+        public ResponseHistoricTaskDto ToDto()
         {
             return new ResponseHistoricTaskDto
             {

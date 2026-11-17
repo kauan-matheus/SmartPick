@@ -16,7 +16,7 @@ namespace WarehouseManagementService.Infra.Data.Repository
             _context = appDbContext;
         }
 
-        public IQueryable<T> Consultar<T>() where T : class
+        public virtual IQueryable<T> Consultar<T>() where T : class
         {
             return _context.Set<T>().AsQueryable(); 
         }
