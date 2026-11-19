@@ -12,7 +12,7 @@ using WarehouseManagementService.Infra.Data.Data;
 namespace WarehouseManagementService.Infra.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261117180511_InitialCreate")]
+    [Migration("20261119175748_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -77,6 +77,25 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("HistoricoTarefas");
+                });
+
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.MapModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mapas");
                 });
 
             modelBuilder.Entity("WarehouseManagementService.Domain.Entities.OrderModel", b =>

@@ -1,9 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using WarehouseManagementService.Domain.Entities;
+using WarehouseManagementService.Infra.Data.Configurations;
 
 namespace WarehouseManagementService.Infra.Data.Data
 {
@@ -21,6 +22,7 @@ namespace WarehouseManagementService.Infra.Data.Data
         public DbSet<ProductModel> Produtos { get; set; }
         public DbSet<HistoricOrderModel> HistoricoPedidos { get; set; }
         public DbSet<HistoricTaskModel> HistoricoTarefas { get; set; }
+        public DbSet<MapModel> Mapas { get; set;  }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,6 +53,8 @@ namespace WarehouseManagementService.Infra.Data.Data
                 .HasOne(h => h.User)
                 .WithMany()
                 .HasForeignKey(h => h.UserId);
+
+            modelBuilder.ApplyConfiguration(new MapConfiguration());
         }
     }
 }

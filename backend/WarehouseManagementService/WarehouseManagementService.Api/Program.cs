@@ -89,15 +89,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Temporario. Preenche o banco de dados com dados iniciais. Remover depois.
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider
-        .GetRequiredService<AppDbContext>();
-
-    await scope.ServiceProvider.GetRequiredService<AppDbSeeder>().SeedAsync();
-}
-
 app.UseSwagger();
 app.UseSwaggerUI();
 

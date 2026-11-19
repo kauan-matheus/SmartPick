@@ -12,6 +12,19 @@ namespace WarehouseManagementService.Infra.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Mapas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Data = table.Column<string>(type: "jsonb", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mapas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pedidos",
                 columns: table => new
                 {
@@ -176,6 +189,9 @@ namespace WarehouseManagementService.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "HistoricoTarefas");
+
+            migrationBuilder.DropTable(
+                name: "Mapas");
 
             migrationBuilder.DropTable(
                 name: "Tarefas");

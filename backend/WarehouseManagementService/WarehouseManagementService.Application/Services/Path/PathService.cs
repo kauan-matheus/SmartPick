@@ -11,106 +11,12 @@ using WarehouseManagementService.Communication.Dto.Responses;
 using WarehouseManagementService.Communication.Enums;
 using WarehouseManagementService.Domain.Entities;
 using WarehouseManagementService.Domain.Interfaces;
+using WarehouseManagementService.Domain.Models;
 
 namespace WarehouseManagementService.Application.Services.Path
 {
     public class PathService : IPathService
     {
-        private RequestPathDto setup = new RequestPathDto
-            {
-                Map = new string[][]
-                {
-                    new[] { ".", ".", ".", "#", ".", ".", ".", ".", ".", "." },
-                    new[] { ".", "#", ".", "#", ".", "#", "#", "#", ".", "." },
-                    new[] { ".", "#", ".", ".", ".", ".", ".", "#", ".", "." },
-                    new[] { ".", "#", "#", "#", "#", "#", ".", "#", ".", "." },
-                    new[] { ".", ".", ".", ".", ".", "#", ".", ".", ".", "." },
-                    new[] { "#", "#", ".", "#", ".", "#", "#", "#", ".", "#" },
-                    new[] { ".", ".", ".", "#", ".", ".", ".", ".", ".", "." },
-                    new[] { ".", "#", ".", ".", ".", "#", ".", "#", "#", "." },
-                    new[] { ".", "#", "#", "#", ".", ".", ".", ".", ".", "." },
-                    new[] { ".", ".", ".", ".", ".", "#", ".", ".", ".", "." }
-                },
-
-                Start = new Ponto
-                {
-                    X = 0,
-                    Y = 0
-                },
-
-                End = new Ponto
-                {
-                    X = 9,
-                    Y = 9
-                },
-
-                Pickups = new List<PickupDto>{}
-            };
-        
-        private List<Pickup> Pickups = new List<Pickup>
-            {
-                new Pickup
-                {
-                    Nome = "P1",
-                    ProductId = new Guid("047c8ea9-d16b-43c7-f586-9e1a2b4c7d38"),
-                    Posicao = new Ponto { X = 5, Y = 2 }
-                },
-                new Pickup
-                {
-                    Nome = "P2",
-                    ProductId = new Guid("158d9fba-e27c-44d8-a697-0f2b3c5d8e49"),
-                    Posicao = new Ponto { X = 8, Y = 4 }
-                },
-                new Pickup
-                {
-                    Nome = "P3",
-                    ProductId = new Guid("269e0acb-f38d-45e9-b7a8-1a3c4d6e9f50"),
-                    Posicao = new Ponto { X = 2, Y = 6 }
-                },
-                new Pickup
-                {
-                    Nome = "P4",
-                    ProductId = new Guid("2914b54f-1169-4699-8e9a-21e483e7e3f2"),
-                    Posicao = new Ponto { X = 1, Y = 0 }
-                },
-                new Pickup
-                {
-                    Nome = "P5",
-                    ProductId = new Guid("a81c2e43-7b95-4d61-9f20-3e5a6b8c1d72"),
-                    Posicao = new Ponto { X = 2, Y = 0 }
-                },
-                new Pickup
-                {
-                    Nome = "P6",
-                    ProductId = new Guid("b92d3f54-8c16-4e72-a031-4f6b7c9d2e83"),
-                    Posicao = new Ponto { X = 4, Y = 0 }
-                },
-                new Pickup
-                {
-                    Nome = "P7",
-                    ProductId = new Guid("c03e4a65-9d27-4f83-b142-5a7c8d0e3f94"),
-                    Posicao = new Ponto { X = 5, Y = 0 }
-                },
-                new Pickup
-                {
-                    Nome = "P8",
-                    ProductId = new Guid("d14f5b76-ae38-4094-c253-6b8d9e1f4a05"),
-                    Posicao = new Ponto { X = 6, Y = 0 }
-                },
-                new Pickup
-                {
-                    Nome = "P9",
-                    ProductId = new Guid("e25a6c87-bf49-41a5-d364-7c9e0f2a5b16"),
-                    Posicao = new Ponto { X = 7, Y = 0 }
-                },
-                new Pickup
-                {
-                    Nome = "P10",
-                    ProductId = new Guid("f36b7d98-c05a-42b6-e475-8d0f1a3b6c27"),
-                    Posicao = new Ponto { X = 8, Y = 0 }
-                },
-            };
-
         private readonly IOrderRepository _repository;
         private readonly IUnitOfWork _unit;
         private readonly string _pathFinderUrl;
@@ -127,6 +33,15 @@ namespace WarehouseManagementService.Application.Services.Path
         {
             try
             {
+                var maps = await _repository.Consultar<MapModel>().ToArrayAsync();
+
+                if (maps.Length == 0)
+                {
+                    return ServiceResponse<ResponsePathDto>.BadRequest("Nenhum mapa encontrado");
+                }
+
+                var defaultMap = maps.FirstOrDefault(m => m.Name == "DefaultMap");
+
                 var order =  await _repository.ConsultarPorId<OrderModel>(id);
 
                 if (order == null)
@@ -144,8 +59,8 @@ namespace WarehouseManagementService.Application.Services.Path
                 var lightTasks = new List<TaskModel>();
                 var heavyTasks = new List<TaskModel>();
 
-                var lightPickups = new List<Pickup>();
-                var heavyPickups = new List<Pickup>();
+                var lightPickups = new List<PickupClass>();
+                var heavyPickups = new List<PickupClass>();
 
                 foreach (var task in tasks)
                 {
@@ -161,13 +76,13 @@ namespace WarehouseManagementService.Application.Services.Path
 
                 if (lightTasks.Count() > 0)
                 {
-                    lightPickups = Pickups.Where(p => lightTasks.Any(t => t.ProductId == p.ProductId)).ToList();
+                    lightPickups = defaultMap.Data.Pickups.Where(p => lightTasks.Any(t => t.ProductId == p.ProductId)).ToList();
 
                     var request1 = new RequestPathDto
                     {
-                        Map = setup.Map,
-                        Start = setup.Start,
-                        End = setup.End,
+                        Map = defaultMap.Data.Map,
+                        Start = defaultMap.Data.Start,
+                        End = defaultMap.Data.End,
                         Pickups = lightPickups.Select(p => p.ToDto()).ToList()
                     };
 
@@ -175,19 +90,23 @@ namespace WarehouseManagementService.Application.Services.Path
 
                     var reply1 = await client.HeldCarpCallAsync(input1);
 
-                    lightPickups = lightPickups.OrderBy(p => reply1.Path.IndexOf(p.Posicao.X * 10 + p.Posicao.Y)).ToList();
+                    lightPickups = reply1.Path
+                        .Skip(1)
+                        .Take(reply1.Path.Count - 2)
+                        .Select(index => lightPickups[index - 1])
+                        .ToList();
 
                     lightTasks = lightTasks.OrderBy(t => lightPickups.IndexOf(lightPickups.First(p => p.ProductId == t.ProductId))).ToList();
                 }
                 if (heavyTasks.Count() > 0)
                 {
-                    heavyPickups = Pickups.Where(p => heavyTasks.Any(t => t.ProductId == p.ProductId)).ToList();
+                    heavyPickups = defaultMap.Data.Pickups.Where(p => heavyTasks.Any(t => t.ProductId == p.ProductId)).ToList();
 
                     var request2 = new RequestPathDto
                     {
-                        Map = setup.Map,
-                        Start = setup.Start,
-                        End = setup.End,
+                        Map = defaultMap.Data.Map,
+                        Start = defaultMap.Data.Start,
+                        End = defaultMap.Data.End,
                         Pickups = heavyPickups.Select(p => p.ToDto()).ToList()
                     };
 
@@ -195,7 +114,11 @@ namespace WarehouseManagementService.Application.Services.Path
 
                     var reply2 = await client.HeldCarpCallAsync(input2);
 
-                    heavyPickups = heavyPickups.OrderBy(p => reply2.Path.IndexOf(p.Posicao.X * 10 + p.Posicao.Y)).ToList();
+                    heavyPickups = reply2.Path
+                        .Skip(1)
+                        .Take(reply2.Path.Count - 2)
+                        .Select(index => lightPickups[index - 1])
+                        .ToList();
 
                     heavyTasks = heavyTasks.OrderBy(t => heavyPickups.IndexOf(heavyPickups.First(p => p.ProductId == t.ProductId))).ToList();
                 }
@@ -211,22 +134,6 @@ namespace WarehouseManagementService.Application.Services.Path
             catch (Exception ex)
             {
                 return ServiceResponse<ResponsePathDto>.Error(ex.Message);
-            }
-        }
-        
-        private class Pickup
-        {
-            public required string Nome { get; set; }
-            public required Guid ProductId { get; set; }
-            public required Ponto Posicao { get; set; }
-
-            public PickupDto ToDto()
-            {
-                return new PickupDto
-                {
-                    Nome = Nome,
-                    Posicao = Posicao
-                };
             }
         }
     }

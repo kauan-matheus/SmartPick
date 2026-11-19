@@ -15,7 +15,7 @@ namespace WarehouseManagementService.Infra.Data.Data
     {
         public async Task SeedAsync()
         {
-            await ProductSeeder.SeedAsync(context);
+            await DefaultMapSeeder.SeedAsync(context);
         }
     }
 }

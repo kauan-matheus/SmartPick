@@ -76,6 +76,25 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.ToTable("HistoricoTarefas");
                 });
 
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.MapModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mapas");
+                });
+
             modelBuilder.Entity("WarehouseManagementService.Domain.Entities.OrderModel", b =>
                 {
                     b.Property<Guid>("Id")

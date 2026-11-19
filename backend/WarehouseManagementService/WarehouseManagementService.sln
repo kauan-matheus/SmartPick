@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Infra.IOC", "WarehouseManagementService.Infra.IOC\WarehouseManagementService.Infra.IOC.csproj", "{423B9BA0-8072-B59F-5F29-324E914B3E02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Seeder", "WarehouseManagementService.Seeder\WarehouseManagementService.Seeder.csproj", "{68BADE2F-178A-472F-BA47-16A0F37E7BC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Seeder", "WarehouseManagementService.Seeder\WarehouseManagementService.Seeder.csproj", "{603942A8-910D-4B22-858A-F8CAEE70615E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{423B9BA0-8072-B59F-5F29-324E914B3E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423B9BA0-8072-B59F-5F29-324E914B3E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423B9BA0-8072-B59F-5F29-324E914B3E02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{603942A8-910D-4B22-858A-F8CAEE70615E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{603942A8-910D-4B22-858A-F8CAEE70615E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{603942A8-910D-4B22-858A-F8CAEE70615E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{603942A8-910D-4B22-858A-F8CAEE70615E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
