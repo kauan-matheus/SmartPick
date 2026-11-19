@@ -3,6 +3,7 @@ using PathFinderService.Domain.Services.Pathfinding.DistanceMatrix;
 using PathFinderService.Domain.Services.Pathfinding.PathfindingAlgorithm.Dijkstra;
 using PathFinderService.Domain.Services.Pathfinding.RouteOptimizer;
 using Shared.Communication.Protos;
+using System.Diagnostics;
 
 namespace PathFinderService.Grpc.Services
 {
@@ -48,8 +49,18 @@ namespace PathFinderService.Grpc.Services
             var map = new string[height, width];
 
             for (int y = 0; y < height; y++)
+            {
                 for (int x = 0; x < width; x++)
+                {
                     map[y, x] = request.Map.Cells[y * width + x] == 1 ? "#" : ".";
+                }
+            }
+
+            Console.WriteLine("Pickups:");
+            foreach (var pickup in request.Pickups)
+            {
+                Console.WriteLine($"  - {pickup.Name}: ({pickup.Position.X}, {pickup.Position.Y})");
+            }
 
             return new Request
             {

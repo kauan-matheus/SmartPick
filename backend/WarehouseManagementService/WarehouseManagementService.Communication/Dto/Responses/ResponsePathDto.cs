@@ -7,7 +7,7 @@ namespace WarehouseManagementService.Communication.Dto.Responses
 {
     public class ResponsePathDto
     {
-        public ICollection<ResponseTaskDto> LightTasks { get; set; } = new List<ResponseTaskDto>();
-        public ICollection<ResponseTaskDto> HeavyTasks { get; set; } = new List<ResponseTaskDto>();
+        public ICollection<ResponseTaskInPathDto> LightTasks { get; set; } = new List<ResponseTaskInPathDto>();
+        public ICollection<ResponseTaskInPathDto> HeavyTasks { get; set; } = new List<ResponseTaskInPathDto>();
     }
 }

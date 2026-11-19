@@ -1,3 +1,4 @@
+using Shared.Communication.Dto.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,18 @@ namespace WarehouseManagementService.Domain.Entities
                 Status = Status,
                 Quantity = Quantity,
                 ProductId = ProductId
+            };
+        }
+        public ResponseTaskInPathDto ToPathDto(Ponto position)
+        {
+            return new ResponseTaskInPathDto
+            {
+                Id = Id,
+                Description = Description,
+                Status = Status,
+                Quantity = Quantity,
+                ProductId = ProductId,
+                Position = position
             };
         }
     }

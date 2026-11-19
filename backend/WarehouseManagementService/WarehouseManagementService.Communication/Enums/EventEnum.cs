@@ -6,6 +6,7 @@ namespace WarehouseManagementService.Communication.Enums
         ORDERCANCELED,
         ORDERFINISHED,
         TASKCREATED,
-        TASKFINISHED
+        TASKFINISHED,
+        TASKCANCELED
     }
 }

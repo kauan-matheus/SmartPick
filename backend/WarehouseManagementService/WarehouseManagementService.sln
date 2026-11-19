@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.7.11911.148 stable
+VisualStudioVersion = 18.7.11911.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Api", "WarehouseManagementService.Api\WarehouseManagementService.Api.csproj", "{F7BE76BB-B514-1BA6-0B8A-28C7F7865D83}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Infra.Data", "WarehouseManagementService.Infra.Data\WarehouseManagementService.Infra.Data.csproj", "{C4F60E0B-08FB-CC32-E67E-D394FE22717C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Infra.IOC", "WarehouseManagementService.Infra.IOC\WarehouseManagementService.Infra.IOC.csproj", "{423B9BA0-8072-B59F-5F29-324E914B3E02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementService.Seeder", "WarehouseManagementService.Seeder\WarehouseManagementService.Seeder.csproj", "{68BADE2F-178A-472F-BA47-16A0F37E7BC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{423B9BA0-8072-B59F-5F29-324E914B3E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423B9BA0-8072-B59F-5F29-324E914B3E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423B9BA0-8072-B59F-5F29-324E914B3E02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BADE2F-178A-472F-BA47-16A0F37E7BC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C26B06F7-4233-408C-9008-FF02C585FCB8}
 	EndGlobalSection
 EndGlobal

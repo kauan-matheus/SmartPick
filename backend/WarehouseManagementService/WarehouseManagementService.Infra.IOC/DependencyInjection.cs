@@ -7,6 +7,7 @@ using WarehouseManagementService.Application.Services.Auth;
 using WarehouseManagementService.Application.Services.Grpc;
 using WarehouseManagementService.Application.Services.Historic;
 using WarehouseManagementService.Application.Services.Order;
+using WarehouseManagementService.Application.Services.Path;
 using WarehouseManagementService.Application.Services.Product;
 using WarehouseManagementService.Domain.Interfaces;
 using WarehouseManagementService.Domain.Validators;
@@ -23,6 +24,8 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             var connectionString = configuration.GetConnectionString("Default");
             services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString, v => v.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
+            services.AddScoped<AppDbSeeder>();
+
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
@@ -33,6 +36,7 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IHistoricService, HistoricService>();
+            services.AddScoped<IPathService, PathService>();
 
             services.AddScoped<TokenService>();
 
