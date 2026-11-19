@@ -56,12 +56,6 @@ namespace PathFinderService.Grpc.Services
                 }
             }
 
-            Console.WriteLine("Pickups:");
-            foreach (var pickup in request.Pickups)
-            {
-                Console.WriteLine($"  - {pickup.Name}: ({pickup.Position.X}, {pickup.Position.Y})");
-            }
-
             return new Request
             {
                 Map = map,
