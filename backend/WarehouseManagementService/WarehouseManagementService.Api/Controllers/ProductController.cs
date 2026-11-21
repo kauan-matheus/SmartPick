@@ -48,7 +48,6 @@ namespace WarehouseManagementService.Api.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = nameof(UserTypeEnum.MANAGER))]

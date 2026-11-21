@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Communication.Dto.Request;
 using WarehouseManagementService.Application.Services.Path;
@@ -10,6 +11,7 @@ namespace WarehouseManagementService.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PathFindController : ControllerBase
     {
         private readonly IPathService _service;

@@ -42,6 +42,11 @@ namespace WarehouseManagementService.Application.Services.Path
 
                 var defaultMap = maps.FirstOrDefault(m => m.Name == "DefaultMap");
 
+                if (defaultMap == null)
+                {
+                    return ServiceResponse<ResponsePathDto>.BadRequest("Mapa padrao não encontrado no banco de dados");
+                }
+
                 var order =  await _repository.ConsultarPorId<OrderModel>(id);
 
                 if (order == null)
@@ -78,13 +83,8 @@ namespace WarehouseManagementService.Application.Services.Path
                 {
                     lightPickups = defaultMap.Data.Pickups.Where(p => lightTasks.Any(t => t.ProductId == p.ProductId)).ToList();
 
-                    var request1 = new RequestPathDto
-                    {
-                        Map = defaultMap.Data.Map,
-                        Start = defaultMap.Data.Start,
-                        End = defaultMap.Data.End,
-                        Pickups = lightPickups.Select(p => p.ToDto()).ToList()
-                    };
+                    var request1 = defaultMap.ToRequestPathDto();
+                    request1.Pickups = lightPickups.Select(p => p.ToDto()).ToList();
 
                     var input1 = PathFinderLib.ToProto(request1);
 
@@ -102,13 +102,8 @@ namespace WarehouseManagementService.Application.Services.Path
                 {
                     heavyPickups = defaultMap.Data.Pickups.Where(p => heavyTasks.Any(t => t.ProductId == p.ProductId)).ToList();
 
-                    var request2 = new RequestPathDto
-                    {
-                        Map = defaultMap.Data.Map,
-                        Start = defaultMap.Data.Start,
-                        End = defaultMap.Data.End,
-                        Pickups = heavyPickups.Select(p => p.ToDto()).ToList()
-                    };
+                    var request2 = defaultMap.ToRequestPathDto();
+                    request2.Pickups = heavyPickups.Select(p => p.ToDto()).ToList();
 
                     var input2 = PathFinderLib.ToProto(request2);
 
@@ -117,7 +112,7 @@ namespace WarehouseManagementService.Application.Services.Path
                     heavyPickups = reply2.Path
                         .Skip(1)
                         .Take(reply2.Path.Count - 2)
-                        .Select(index => lightPickups[index - 1])
+                        .Select(index => heavyPickups[index - 1])
                         .ToList();
 
                     heavyTasks = heavyTasks.OrderBy(t => heavyPickups.IndexOf(heavyPickups.First(p => p.ProductId == t.ProductId))).ToList();

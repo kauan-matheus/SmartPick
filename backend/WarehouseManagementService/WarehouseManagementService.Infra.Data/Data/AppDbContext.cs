@@ -20,6 +20,7 @@ namespace WarehouseManagementService.Infra.Data.Data
         public DbSet<OrderModel> Pedidos { get; set; }
         public DbSet<TaskModel> Tarefas { get; set; }
         public DbSet<ProductModel> Produtos { get; set; }
+        public DbSet<RequestModel> Solicitacoes { get; set; }
         public DbSet<HistoricOrderModel> HistoricoPedidos { get; set; }
         public DbSet<HistoricTaskModel> HistoricoTarefas { get; set; }
         public DbSet<MapModel> Mapas { get; set;  }
@@ -53,6 +54,11 @@ namespace WarehouseManagementService.Infra.Data.Data
                 .HasOne(h => h.User)
                 .WithMany()
                 .HasForeignKey(h => h.UserId);
+
+            modelBuilder.Entity<RequestModel>()
+                .HasOne(r => r.Order)
+                .WithMany()
+                .HasForeignKey(r => r.OrderId);
 
             modelBuilder.ApplyConfiguration(new MapConfiguration());
         }

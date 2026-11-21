@@ -70,6 +70,27 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Solicitacoes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Justification = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Objective = table.Column<int>(type: "integer", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Solicitacoes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Solicitacoes_Pedidos_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Pedidos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tarefas",
                 columns: table => new
                 {
@@ -171,6 +192,11 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Solicitacoes_OrderId",
+                table: "Solicitacoes",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tarefas_OrderId",
                 table: "Tarefas",
                 column: "OrderId");
@@ -192,6 +218,9 @@ namespace WarehouseManagementService.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Mapas");
+
+            migrationBuilder.DropTable(
+                name: "Solicitacoes");
 
             migrationBuilder.DropTable(
                 name: "Tarefas");

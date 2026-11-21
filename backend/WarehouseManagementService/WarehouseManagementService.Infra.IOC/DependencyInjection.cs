@@ -9,6 +9,8 @@ using WarehouseManagementService.Application.Services.Historic;
 using WarehouseManagementService.Application.Services.Order;
 using WarehouseManagementService.Application.Services.Path;
 using WarehouseManagementService.Application.Services.Product;
+using WarehouseManagementService.Application.Services.Request;
+using WarehouseManagementService.Application.Services.TaskHandle;
 using WarehouseManagementService.Domain.Interfaces;
 using WarehouseManagementService.Domain.Validators;
 using WarehouseManagementService.Infra.Data.Data;
@@ -31,12 +33,15 @@ namespace WarehouseManagementService.Infra.IOC.DependencyInjection
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IHistoricRepository, HistoricRepository>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IHistoricService, HistoricService>();
             services.AddScoped<IPathService, PathService>();
+            services.AddScoped<IRequestService, RequestService>();
+            services.AddScoped<ITaskService, TaskService>();
 
             services.AddScoped<TokenService>();
 

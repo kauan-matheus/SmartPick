@@ -27,7 +27,7 @@ namespace WarehouseManagementService.Application.Services.Order
         {
             try
             {
-                var query = _repository.Consultar();
+                var query = _repository.Consultar().Where(o => o.Status != StatusEnum.CANCELED);
 
                 var orders = await query.ToListAsync();
 

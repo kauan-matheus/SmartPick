@@ -12,7 +12,7 @@ using WarehouseManagementService.Infra.Data.Data;
 namespace WarehouseManagementService.Infra.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261119175748_InitialCreate")]
+    [Migration("20261120161446_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -145,6 +145,32 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.ToTable("Produtos");
                 });
 
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.RequestModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Justification")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Objective")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Solicitacoes");
+                });
+
             modelBuilder.Entity("WarehouseManagementService.Domain.Entities.TaskModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -239,6 +265,17 @@ namespace WarehouseManagementService.Infra.Data.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WarehouseManagementService.Domain.Entities.RequestModel", b =>
+                {
+                    b.HasOne("WarehouseManagementService.Domain.Entities.OrderModel", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("WarehouseManagementService.Domain.Entities.TaskModel", b =>
