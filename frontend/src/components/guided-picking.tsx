@@ -68,7 +68,7 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
     .filter(({ stop, units }) => units > 0 || stop.id in justified);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 pt-5 md:px-8 md:pt-8">
+    <main className="flex w-full flex-1 flex-col px-4 pt-5 md:px-8 md:pt-8">
       {/* Título */}
       <div className="-mx-4 -mt-5 bg-white px-4 py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
         <div className="flex items-center gap-3">

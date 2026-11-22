@@ -13,7 +13,7 @@ export function Sidebar() {
     <aside className="sticky top-0 hidden h-screen w-60 shrink-0 self-start border-r bg-white md:flex md:flex-col">
       <div className="flex h-12 items-center gap-2 bg-black px-4 font-semibold text-white">
         <Warehouse className="size-4" />
-        elo
+        SmartPick
       </div>
 
       <nav className="flex flex-col gap-1 p-3">

@@ -31,8 +31,8 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
   const statusLabel = completed ? "Concluída" : "Não iniciada";
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-10 pt-5 md:px-8 md:pb-10 md:pt-8">
-      <div className="-mx-4 -mt-5 bg-white px-4 py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
+    <main className="w-full flex-1 px-3 pb-8 pt-4 sm:px-4 sm:pb-10 sm:pt-5 md:px-8 md:pt-8">
+      <div className="-mx-3 -mt-4 bg-white px-3 py-3 sm:-mx-4 sm:-mt-5 sm:px-4 sm:py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
         <div className="flex items-center gap-3">
           <Link
             href="/"
@@ -42,7 +42,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             <ArrowLeft className="size-5" />
           </Link>
           <div>
-            <h1 className="text-xl font-bold md:text-2xl">
+            <h1 className="text-[clamp(1.125rem,3.2vw,1.5rem)] font-bold">
               Tarefas designadas
             </h1>
             <p className="mt-1 text-sm text-neutral-500">
@@ -52,9 +52,9 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
         </div>
       </div>
 
-      <section className="mt-5" aria-labelledby="order-summary-title">
+      <section className="mt-4 sm:mt-5" aria-labelledby="order-summary-title">
         <div className="flex items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0">
             <h2 id="order-summary-title" className="font-semibold">
               Pedido #{order.id}
             </h2>
@@ -62,22 +62,25 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               {order.category} · {statusLabel}
             </p>
           </div>
-          <Package className="mt-1 size-5 text-orange" />
+          <Package className="mt-1 size-5 shrink-0 text-orange" />
         </div>
       </section>
 
-      <section className="mt-6" aria-labelledby="task-type-title">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <h2 id="task-type-title" className="font-semibold">
+      <section className="mt-5 sm:mt-6" aria-labelledby="task-type-title">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2
+            id="task-type-title"
+            className="min-w-0 flex-1 text-[clamp(0.9rem,2.8vw,1rem)] font-semibold"
+          >
             Selecione uma tarefa para começar a coleta
           </h2>
           <Badge
             variant="secondary"
-            className={
+            className={`shrink-0 ${
               order.status === "alerta"
                 ? "bg-warn-bg text-warn-fg"
                 : "bg-muted-bg text-neutral-600"
-            }
+            }`}
           >
             {order.status === "alerta" ? "Prioridade alta" : "Prioridade normal"}
           </Badge>
@@ -90,7 +93,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             aria-pressed={selectedTaskType === "light"}
             disabled={completed}
             onClick={() => setSelectedTaskType("light")}
-            className={`h-auto min-h-32 flex-col items-start justify-between rounded-2xl p-4 text-left whitespace-normal ${
+            className={`h-auto min-h-28 flex-col items-start justify-between rounded-2xl p-3 text-left whitespace-normal sm:min-h-32 sm:p-4 ${
               selectedTaskType === "light"
                 ? "border-orange bg-orange-soft text-foreground"
                 : "bg-white"
@@ -101,7 +104,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               {selectedTaskType === "light" && <Check className="size-4 text-orange" />}
             </span>
             <span>
-              <span className="block text-2xl font-bold">{order.lightTasks}</span>
+              <span className="block text-[clamp(1.5rem,4vw,2rem)] font-bold">{order.lightTasks}</span>
               <span className="mt-1 block text-sm font-semibold">Tarefas leves</span>
               <span className="mt-1 block text-xs text-neutral-500">
                 {selectedTaskType === "light" ? "Selecionada" : "Toque para selecionar"}
@@ -115,7 +118,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             aria-pressed={selectedTaskType === "heavy"}
             disabled={completed}
             onClick={() => setSelectedTaskType("heavy")}
-            className={`h-auto min-h-32 flex-col items-start justify-between rounded-2xl p-4 text-left whitespace-normal ${
+            className={`h-auto min-h-28 flex-col items-start justify-between rounded-2xl p-3 text-left whitespace-normal sm:min-h-32 sm:p-4 ${
               selectedTaskType === "heavy"
                 ? "border-orange bg-orange-soft text-foreground"
                 : "bg-white"
@@ -126,7 +129,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               {selectedTaskType === "heavy" && <Check className="size-4 text-orange" />}
             </span>
             <span>
-              <span className="block text-2xl font-bold">{order.heavyTasks}</span>
+              <span className="block text-[clamp(1.5rem,4vw,2rem)] font-bold">{order.heavyTasks}</span>
               <span className="mt-1 block text-sm font-semibold">Tarefas pesadas</span>
               <span className="mt-1 block text-xs text-neutral-500">
                 {selectedTaskType === "heavy" ? "Selecionada" : "Toque para selecionar"}
@@ -144,46 +147,46 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
           </Badge>
         )}
 
-        <Card className="mt-4 gap-0 rounded-2xl p-4 shadow-sm">
+        <Card className="mt-4 gap-0 rounded-2xl p-3 shadow-sm sm:p-4">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-semibold">Pedido #{order.id}</h3>
+            <div className="min-w-0">
+              <h3 className="text-[clamp(1rem,3vw,1.125rem)] font-semibold">Pedido #{order.id}</h3>
               <p className="mt-1 text-sm text-neutral-500">{order.category}</p>
             </div>
             <Badge
               variant="secondary"
-              className={
+              className={`shrink-0 ${
                 completed
                   ? "bg-orange-soft text-orange"
                   : "bg-muted-bg text-neutral-600"
-              }
+              }`}
             >
               {statusLabel}
             </Badge>
           </div>
 
-          <dl className="mt-4 space-y-3 border-t pt-3 text-sm">
-            <div className="flex justify-between gap-3">
-              <dt className="text-neutral-500">Destinatário</dt>
-              <dd className="text-right font-medium">{order.recipient}</dd>
+          <dl className="mt-3 space-y-2 border-t pt-3 text-sm sm:mt-4 sm:space-y-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
+              <dt className="min-w-0 text-neutral-500">Destinatário</dt>
+              <dd className="min-w-0 break-words text-right font-medium">{order.recipient}</dd>
             </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-neutral-500">Total de tarefas / unidades</dt>
-              <dd className="font-medium">{order.units}</dd>
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
+              <dt className="min-w-0 text-neutral-500">Total de tarefas / unidades</dt>
+              <dd className="min-w-0 text-right font-medium">{order.units}</dd>
             </div>
-            <div className="flex justify-between gap-3">
-              <dt className="flex items-center gap-1 text-neutral-500">
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
+              <dt className="flex min-w-0 items-center gap-1 text-neutral-500">
                 <Truck className="size-4" />
                 Transportadora
               </dt>
-              <dd className="text-right font-medium">{order.carrier}</dd>
+              <dd className="min-w-0 break-words text-right font-medium">{order.carrier}</dd>
             </div>
-            <div className="flex justify-between gap-3">
-              <dt className="flex items-center gap-1 text-neutral-500">
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
+              <dt className="flex min-w-0 items-center gap-1 text-neutral-500">
                 <Clock3 className="size-4" />
                 Horário da coleta
               </dt>
-              <dd className="font-medium">{order.pickup}</dd>
+              <dd className="min-w-0 text-right font-medium">{order.pickup}</dd>
             </div>
           </dl>
         </Card>

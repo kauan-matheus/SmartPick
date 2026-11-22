@@ -18,7 +18,7 @@ const statusConfig: Record<
   },
   concluido: {
     label: "Concluído",
-    badge: "bg-orange-soft text-orange",
+    badge: "bg-green-100 text-green-700",
   },
 };
 

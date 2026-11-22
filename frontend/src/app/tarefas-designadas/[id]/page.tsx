@@ -24,7 +24,7 @@ export default async function AssignedTaskPage({
       <div className="min-h-screen bg-neutral-100 md:flex">
         <Sidebar />
 
-        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        <div className="flex min-h-[calc(100svh-3rem)] min-w-0 flex-1 flex-col">
           <AppHeader />
           <AssignedTaskDetails order={order} />
         </div>
