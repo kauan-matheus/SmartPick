@@ -12,7 +12,7 @@ export function BottomNav() {
     <nav className="fixed inset-x-0 bottom-0 z-10 flex justify-around border-t bg-white px-4 py-2 md:hidden">
       {navItems.map(({ label, icon: Icon, href }) => {
         const className = cn(
-          "flex w-24 flex-col items-center gap-1 rounded-xl py-2 text-xs",
+          "flex w-24 flex-col items-center gap-1 rounded-xl py-2 text-center text-xs",
           href === pathname
             ? "bg-orange-soft font-semibold text-orange"
             : "text-neutral-600"

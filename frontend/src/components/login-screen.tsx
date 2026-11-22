@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, useSyncExternalStore, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
@@ -13,8 +13,22 @@ import {
 import { login } from "@/lib/auth";
 import { authStorageKey, getStoredAuth } from "@/lib/auth-session";
 
+function subscribeToStorage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+
+function hasStoredAuth() {
+  return getStoredAuth() !== null;
+}
+
 export function LoginScreen() {
   const router = useRouter();
+  const isAuthenticated = useSyncExternalStore(
+    subscribeToStorage,
+    hasStoredAuth,
+    () => false,
+  );
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -46,6 +60,17 @@ export function LoginScreen() {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  if (isAuthenticated) {
+    return (
+      <main
+        aria-live="polite"
+        className="flex min-h-screen items-center justify-center bg-neutral-100 text-sm text-neutral-500"
+      >
+        Verificando acesso...
+      </main>
+    );
   }
 
   return (

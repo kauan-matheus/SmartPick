@@ -294,7 +294,7 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
             asChild
             className="h-12 w-full rounded-xl bg-orange text-base font-semibold text-white hover:bg-orange/90"
           >
-            <Link href="/">Voltar para pedidos</Link>
+            <Link href="/tarefas-designadas">Voltar para pedidos</Link>
           </Button>
         ) : (
           <>

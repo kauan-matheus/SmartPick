@@ -1,6 +1,6 @@
 import { ClipboardList, User } from "lucide-react";
 
 export const navItems = [
-  { label: "Tarefas designadas", icon: ClipboardList, href: "/tarefas-designadas" },
-  { label: "Meus dados", icon: User },
+  { label: "Tarefas Designadas", icon: ClipboardList, href: "/tarefas-designadas" },
+  { label: "Meus Dados", icon: User },
 ];
