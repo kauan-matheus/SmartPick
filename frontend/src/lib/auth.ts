@@ -1,113 +1,50 @@
+import axios from "axios";
+import { api } from "@/lib/api";
+import { enumName, userTypeNames } from "@/lib/enums";
+
 export interface AuthResponse {
   token: string;
   expiresIn: string;
-  usuario: {
-    id: string;
-    nome: string;
-    email: string;
-    type: string;
-  };
+  usuario: { id: string; nome: string; email: string; type: string };
 }
 
-const apiBaseUrl =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "") ??
-  "https://localhost:7004";
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
+// Como a API realmente responde: type pode vir como número
+interface LoginApiResponse {
+  token: string;
+  expiresIn: string;
+  usuario: { id: string; nome: string; email: string; type: number | string };
 }
 
-function isAuthResponse(value: unknown): value is AuthResponse {
-  if (!isRecord(value) || !isRecord(value.usuario)) {
-    return false;
+export function getErrorMessage(error: unknown, fallback: string): string {
+  if (axios.isAxiosError(error)) {
+    if (!error.response) {
+      return "Não foi possível conectar ao servidor. Verifique se a API está em execução.";
+    }
+    const data: unknown = error.response.data;
+    if (typeof data === "string" && data) return data;              // ex.: 401 do login
+    if (Array.isArray(data) && data.length) return data.join(" ");  // erros de validação
   }
-
-  return (
-    typeof value.token === "string" &&
-    typeof value.expiresIn === "string" &&
-    typeof value.usuario.id === "string" &&
-    typeof value.usuario.nome === "string" &&
-    typeof value.usuario.email === "string" &&
-    typeof value.usuario.type === "string"
-  );
+  return fallback;
 }
 
-//Criado um login com variaveis fixas, futuramente alterar para variaveis estaticas
 export async function login(
   username: string,
   password: string,
 ): Promise<AuthResponse> {
-  if (process.env.NODE_ENV === "development") {
-    if (username.trim() !== "usuario") {
-      throw new Error("Nome de usuário incorreto, tente novamente!");
-    }
-
-    if (password !== "1234") {
-      throw new Error("Senha incorreta, tente novamente!");
-    }
+  try {
+    const { data } = await api.post<LoginApiResponse>("/login", {
+      email: username,
+      password,
+    });
 
     return {
-      token: "development-demo-token",
-      expiresIn: "8h",
+      ...data,
       usuario: {
-        id: "demo-user",
-        nome: "Usuário",
-        email: "usuario",
-        type: "EMPLOYEE",
+        ...data.usuario,
+        type: enumName(userTypeNames, data.usuario.type), // 0 -> "MANAGER", 1 -> "EMPLOYEE"
       },
     };
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "E-mail ou senha incorretos."));
   }
-
-  let response: Response;
-
-  try {
-    response = await fetch(`${apiBaseUrl}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: username, password }),
-    });
-  } catch {
-    throw new Error(
-      "Não foi possível conectar ao servidor. Verifique se a API está em execução.",
-    );
-  }
-
-  if (!response.ok) {
-    const body = await response.text();
-    let message = "E-mail ou senha incorretos.";
-
-    if (body) {
-      try {
-        const parsed: unknown = JSON.parse(body);
-        if (typeof parsed === "string") {
-          message = parsed;
-        } else if (
-          parsed &&
-          typeof parsed === "object" &&
-          "message" in parsed &&
-          typeof parsed.message === "string"
-        ) {
-          message = parsed.message;
-        }
-      } catch {
-        message = body;
-      }
-    }
-
-    throw new Error(message);
-  }
-
-  let payload: unknown;
-
-  try {
-    payload = await response.json();
-  } catch {
-    throw new Error("O servidor retornou uma resposta inválida.");
-  }
-
-  if (!isAuthResponse(payload)) {
-    throw new Error("O servidor retornou dados de acesso incompletos.");
-  }
-
-  return payload;
 }
