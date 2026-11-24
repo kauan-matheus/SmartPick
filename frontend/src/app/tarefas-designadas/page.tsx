@@ -9,12 +9,10 @@ export default function AssignedTasksPage() {
     <AuthGuard>
       <div className="min-h-screen bg-neutral-100 md:flex">
         <Sidebar />
-
         <div className="flex min-h-screen min-w-0 flex-1 flex-col">
           <AppHeader />
           <OrdersScreen />
         </div>
-
         <BottomNav />
       </div>
     </AuthGuard>

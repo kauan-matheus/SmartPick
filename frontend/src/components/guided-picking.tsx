@@ -19,13 +19,14 @@ import {
   notifyCollectionReviewUpdated,
   type CollectionReviewData,
 } from "@/lib/collection-session";
-import { getPickingStops, type TaskType } from "@/lib/picking";
+import type { PickingStop, TaskType } from "@/lib/picking";
 import type { Order } from "@/lib/orders";
 import { cn } from "@/lib/utils";
 
 interface GuidedPickingProps {
   order: Order;
   taskType: TaskType;
+  stops: PickingStop[];
 }
 
 const justifyReasons = [
@@ -34,12 +35,8 @@ const justifyReasons = [
   "Endereço bloqueado",
 ];
 
-export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
+export function GuidedPicking({ order, taskType, stops }: GuidedPickingProps) {
   const router = useRouter();
-  const stops = getPickingStops(
-    taskType,
-    taskType === "light" ? order.lightTasks : order.heavyTasks
-  );
 
   const [collected, setCollected] = useState<number[]>(stops.map(() => 0));
   const [justified, setJustified] = useState<Record<string, string>>({});

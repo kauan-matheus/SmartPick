@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -21,13 +21,16 @@ import {
   subscribeToCollectionReview,
   type CollectionReviewData,
 } from "@/lib/collection-session";
-import { getPickingStops, type TaskType } from "@/lib/picking";
+import type { PickingPlan, PickingStop, TaskType } from "@/lib/picking";
 import type { Order } from "@/lib/orders";
+import { getErrorMessage } from "@/lib/auth";
+import { finishTasks } from "@/lib/tasks";
 import { cn } from "@/lib/utils";
 
 interface CollectionReviewProps {
   order: Order;
   taskType: TaskType;
+  stopsByType: PickingPlan;
 }
 
 const taskTypes: TaskType[] = ["light", "heavy"];
@@ -38,7 +41,7 @@ function getServerSnapshot() {
 
 function parseReviewData(
   snapshot: string,
-  stops: ReturnType<typeof getPickingStops>
+  stops: PickingStop[]
 ): CollectionReviewData | null {
   if (!snapshot) return null;
 
@@ -98,12 +101,11 @@ function parseReviewData(
   }
 }
 
-export function CollectionReview({ order, taskType }: CollectionReviewProps) {
+export function CollectionReview({ order, taskType, stopsByType }: CollectionReviewProps) {
   const router = useRouter();
-  const stops = getPickingStops(
-    taskType,
-    taskType === "light" ? order.lightTasks : order.heavyTasks
-  );
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const stops = stopsByType[taskType];
   const storageKey = getCollectionReviewStorageKey(order.id, taskType);
   const otherTaskType = taskType === "light" ? "heavy" : "light";
   const otherStorageKey = getCollectionReviewStorageKey(
@@ -124,16 +126,12 @@ export function CollectionReview({ order, taskType }: CollectionReviewProps) {
     () =>
       taskTypes
         .filter((type) => {
-          const taskCount = type === "light" ? order.lightTasks : order.heavyTasks;
-          const taskStops = getPickingStops(
-            type,
-            taskCount
-          );
+          const taskStops = stopsByType[type];
           const taskSnapshot = sessionStorage.getItem(
             getCollectionReviewStorageKey(order.id, type)
           );
           return (
-            taskCount === 0 ||
+            taskStops.length === 0 ||
             parseReviewData(taskSnapshot ?? "", taskStops) !== null
           );
         })
@@ -168,11 +166,25 @@ export function CollectionReview({ order, taskType }: CollectionReviewProps) {
   ).length;
   const taskCode = `${taskType === "heavy" ? "P" : "L"}07`;
 
-  function handleConclude() {
-    if (!canConclude) return;
-    sessionStorage.removeItem(storageKey);
-    sessionStorage.removeItem(otherStorageKey);
-    router.push("/tarefas-designadas");
+  async function handleConclude() {
+    if (!canConclude || submitting) return;
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const taskIds = [...stopsByType.light, ...stopsByType.heavy].map(
+        (stop) => stop.id,
+      );
+      await finishTasks(taskIds);
+      sessionStorage.removeItem(storageKey);
+      sessionStorage.removeItem(otherStorageKey);
+      router.push("/tarefas-designadas");
+    } catch (error) {
+      setSubmitError(
+        getErrorMessage(error, "Não foi possível registrar a conclusão das tarefas."),
+      );
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -328,7 +340,7 @@ export function CollectionReview({ order, taskType }: CollectionReviewProps) {
 
       <div className="sticky bottom-0 -mx-4 mt-auto border-t bg-white px-4 pb-4 pt-3 md:-mx-8 md:px-8">
         {!completedTaskTypes.includes(otherTaskType) &&
-          (otherTaskType === "light" ? order.lightTasks : order.heavyTasks) > 0 && (
+          stopsByType[otherTaskType].length > 0 && (
           <Button
             type="button"
             variant="outline"
@@ -352,14 +364,19 @@ export function CollectionReview({ order, taskType }: CollectionReviewProps) {
         <p className="mb-3 text-center text-[11px] text-neutral-500">
           Confira os volumes antes de concluir.
         </p>
+        {submitError && (
+          <p role="alert" className="mb-3 text-center text-sm text-red-700">
+            {submitError}
+          </p>
+        )}
         <Button
           type="button"
           onClick={handleConclude}
-          disabled={!canConclude}
+          disabled={!canConclude || submitting}
           className="h-12 w-full rounded-xl bg-orange text-base font-semibold text-white hover:bg-orange/90"
         >
           <Check className="size-5" />
-          Concluir tarefa
+          {submitting ? "Registrando tarefas..." : "Concluir tarefa"}
         </Button>
       </div>
     </main>
