@@ -116,17 +116,17 @@ export function GuidedPicking({ order, taskType, stops }: GuidedPickingProps) {
   return (
     <main className="flex w-full flex-1 flex-col px-4 pt-5 md:px-8 md:pt-8">
       {/* Título */}
-      <div className="-mx-4 -mt-5 bg-white px-4 py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
+      <div className="-mx-4 -mt-5 border-b border-[#e8e2d9] bg-[#faf8f5] px-4 py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
         <div className="flex items-center gap-3">
           <Link
             href={`/tarefas-designadas/${order.id}`}
             aria-label="Voltar para tarefas designadas"
-            className="flex size-10 shrink-0 items-center justify-center rounded-xl border bg-white text-neutral-700 hover:bg-neutral-100"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#e8e2d9] bg-white text-neutral-700 transition hover:bg-[#f3efe9]"
           >
             <ArrowLeft className="size-5" />
           </Link>
           <div>
-            <h1 className="text-xl font-bold md:text-2xl">Coleta guiada</h1>
+            <h1 className="text-xl font-semibold md:text-2xl">Coleta guiada</h1>
             <p className="mt-1 text-sm text-neutral-500">
               Tarefa {taskCode} · Pedido #{order.id}
             </p>
@@ -155,7 +155,7 @@ export function GuidedPicking({ order, taskType, stops }: GuidedPickingProps) {
                   "h-1.5 rounded-full",
                   isDone(index) || index === currentIndex
                     ? "bg-orange"
-                    : "bg-neutral-200"
+                    : "bg-[#e8e2d9]"
                 )}
               />
               <span
@@ -200,12 +200,12 @@ export function GuidedPicking({ order, taskType, stops }: GuidedPickingProps) {
 
             {/* Endereço */}
             <section
-              className="rounded-2xl bg-black p-5 text-white"
+              className="rounded-2xl bg-[#292524] p-5 text-white"
               aria-label="Endereço atual"
             >
-              <p className="flex items-center gap-2 text-xs font-medium tracking-wide text-white/80">
+              <p className="flex items-center gap-2 text-xs font-medium text-white/80">
                 <MapPin className="size-4" />
-                VÁ ATÉ O ENDEREÇO
+                Vá até o endereço
               </p>
               <p className="mt-3 text-6xl font-bold">{current.address}</p>
               <p className="mt-3 text-sm text-white/70">{current.location}</p>
@@ -214,11 +214,11 @@ export function GuidedPicking({ order, taskType, stops }: GuidedPickingProps) {
             {/* Item */}
             <Card className="gap-0 rounded-2xl p-4 shadow-sm">
               <div className="flex items-center gap-3">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl border bg-neutral-100">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[#e8e2d9] bg-[#f3efe9]">
                   <Package className="size-6 text-neutral-700" />
                 </span>
                 <div>
-                  <h2 className="text-xl font-bold">{current.name}</h2>
+                  <h2 className="text-xl font-semibold">{current.name}</h2>
                   <p className="text-sm text-neutral-500">{current.detail}</p>
                 </div>
               </div>
@@ -325,7 +325,7 @@ export function GuidedPicking({ order, taskType, stops }: GuidedPickingProps) {
       )}
 
       {/* Rodapé fixo */}
-      <div className="sticky bottom-0 -mx-4 mt-auto border-t bg-white px-4 pb-4 pt-3 md:-mx-8 md:px-8">
+      <div className="sticky bottom-0 -mx-4 mt-auto border-t border-[#e8e2d9] bg-[#faf8f5]/95 px-4 pb-4 pt-3 backdrop-blur md:-mx-8 md:px-8">
         {!finished && (
           <>
             <p className="mb-2 text-center text-xs text-neutral-500">

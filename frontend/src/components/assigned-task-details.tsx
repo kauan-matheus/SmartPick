@@ -32,17 +32,17 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
 
   return (
     <main className="w-full flex-1 px-3 pb-8 pt-4 sm:px-4 sm:pb-10 sm:pt-5 md:px-8 md:pt-8">
-      <div className="-mx-3 -mt-4 bg-white px-3 py-3 sm:-mx-4 sm:-mt-5 sm:px-4 sm:py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
+      <div className="-mx-3 -mt-4 border-b border-[#e8e2d9] bg-[#faf8f5] px-3 py-3 sm:-mx-4 sm:-mt-5 sm:px-4 sm:py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
         <div className="flex items-center gap-3">
           <Link
             href="/"
             aria-label="Voltar para pedidos"
-            className="flex size-10 shrink-0 items-center justify-center rounded-xl border bg-white text-neutral-700 hover:bg-neutral-100"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#e8e2d9] bg-white text-neutral-700 transition hover:bg-[#f3efe9]"
           >
             <ArrowLeft className="size-5" />
           </Link>
           <div>
-            <h1 className="text-[clamp(1.125rem,3.2vw,1.5rem)] font-bold">
+            <h1 className="text-[clamp(1.125rem,3.2vw,1.5rem)] font-semibold">
               Tarefas designadas
             </h1>
             <p className="mt-1 text-sm text-neutral-500">

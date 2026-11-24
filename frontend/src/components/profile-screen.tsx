@@ -24,7 +24,7 @@ export function ProfileScreen() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 pb-28 pt-5 md:px-8 md:pb-10 md:pt-8">
       <div>
-        <h1 className="text-2xl font-bold md:text-3xl">Meus Dados</h1>
+        <h1 className="text-2xl font-semibold md:text-3xl">Meus Dados</h1>
         <p className="mt-1 text-sm text-neutral-500">
           Informações da sua conta SmartPick.
         </p>

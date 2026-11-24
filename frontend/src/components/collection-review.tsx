@@ -189,18 +189,18 @@ export function CollectionReview({ order, taskType, stopsByType }: CollectionRev
 
   return (
     <main className="flex w-full flex-1 flex-col px-4 pt-5 md:px-8 md:pt-8">
-      <div className="-mx-4 -mt-5 bg-white px-4 py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
+      <div className="-mx-4 -mt-5 border-b border-[#e8e2d9] bg-[#faf8f5] px-4 py-4 md:-mx-8 md:-mt-8 md:px-8 md:py-6">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => router.push(`/tarefas-designadas/${order.id}`)}
             aria-label="Voltar para tarefas designadas"
-            className="flex size-10 shrink-0 items-center justify-center rounded-xl border bg-white text-neutral-700 hover:bg-neutral-100"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#e8e2d9] bg-white text-neutral-700 transition hover:bg-[#f3efe9]"
           >
             <ArrowLeft className="size-5" />
           </button>
           <div>
-            <h1 className="text-xl font-bold md:text-2xl">Revisar coleta</h1>
+            <h1 className="text-xl font-semibold md:text-2xl">Revisar coleta</h1>
             <p className="mt-1 text-sm text-neutral-500">
               Histórico coletado · Tarefa {taskCode}
             </p>
@@ -338,7 +338,7 @@ export function CollectionReview({ order, taskType, stopsByType }: CollectionRev
         </Card>
       </section>
 
-      <div className="sticky bottom-0 -mx-4 mt-auto border-t bg-white px-4 pb-4 pt-3 md:-mx-8 md:px-8">
+      <div className="sticky bottom-0 -mx-4 mt-auto border-t border-[#e8e2d9] bg-[#faf8f5]/95 px-4 pb-4 pt-3 backdrop-blur md:-mx-8 md:px-8">
         {!completedTaskTypes.includes(otherTaskType) &&
           stopsByType[otherTaskType].length > 0 && (
           <Button
@@ -349,7 +349,7 @@ export function CollectionReview({ order, taskType, stopsByType }: CollectionRev
                 `/coleta-guiada/${order.id}?tipo=${otherTaskType}`
               )
             }
-            className="mb-3 h-12 w-full rounded-xl border-black bg-black text-base font-semibold text-white hover:bg-black/90 hover:text-white"
+            className="mb-3 h-12 w-full rounded-xl border border-orange/30 bg-orange-soft text-base font-semibold text-orange hover:bg-orange/15 hover:text-orange"
           >
             <ArrowRight className="size-5" />
             Coleta {otherTaskType === "heavy" ? "Pesada" : "Leve"}

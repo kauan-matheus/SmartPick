@@ -10,9 +10,11 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-60 shrink-0 self-start border-r bg-white md:flex md:flex-col">
-      <div className="flex h-12 items-center gap-2 bg-black px-4 font-semibold text-white">
-        <Warehouse className="size-4" />
+    <aside className="sticky top-0 hidden h-screen w-60 shrink-0 self-start border-r border-[#e8e2d9] bg-[#faf8f5] md:flex md:flex-col">
+      <div className="flex h-14 items-center gap-2 border-b border-[#e8e2d9] px-4 font-semibold text-[#1c1917]">
+        <span className="flex size-8 items-center justify-center rounded-lg bg-orange-soft text-orange">
+          <Warehouse className="size-4" />
+        </span>
         SmartPick
       </div>
 
@@ -22,7 +24,7 @@ export function Sidebar() {
             "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors",
             href === pathname
               ? "bg-orange-soft font-semibold text-orange"
-              : "text-neutral-600 hover:bg-neutral-100"
+              : "text-neutral-600 hover:bg-[#f3efe9]"
           );
           const content = (
             <>

@@ -4,6 +4,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes login-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-enter {
+  animation: login-enter 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-enter {
+    animation: none;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -56,45 +77,45 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --background: #faf8f5;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --card-foreground: #1c1917;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --primary: #e8790c;
+  --primary-foreground: #ffffff;
+  --secondary: #f3efe9;
+  --secondary-foreground: #292524;
+  --muted: #f3efe9;
+  --muted-foreground: #70685f;
+  --accent: #f3efe9;
+  --accent-foreground: #292524;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #e8e2d9;
+  --input: #e8e2d9;
+  --ring: #e8790c;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #faf8f5;
+  --sidebar-foreground: #1c1917;
+  --sidebar-primary: #e8790c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fde9d2;
+  --sidebar-accent-foreground: #a84b08;
+  --sidebar-border: #e8e2d9;
+  --sidebar-ring: #e8790c;
 
-  --black: #000;
+  --black: #1c1917;
   --orange: #e8790c;
   --orange-soft: #fde9d2;
   --warn-bg: #fde8cc;
   --warn-fg: #b4540a;
-  --muted-bg: #ececec;
+  --muted-bg: #f3efe9;
 }
 
 .dark {

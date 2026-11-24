@@ -32,8 +32,8 @@ export function OrderCard({ order }: OrderCardProps) {
   return (
     <Card className="h-full gap-0 rounded-2xl p-4 shadow-sm">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs tracking-wide text-neutral-500">
-          PEDIDO #{order.id}
+        <span className="text-xs text-neutral-500">
+          Pedido #{order.id}
         </span>
         <Badge variant="secondary" className={status.badge}>
           {status.label}

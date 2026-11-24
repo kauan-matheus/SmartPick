@@ -35,7 +35,7 @@ export function AuthGuard({ children }: { children: ReactNode }) {
     return (
       <main
         aria-live="polite"
-        className="flex min-h-screen items-center justify-center bg-neutral-100 text-sm text-neutral-500"
+        className="flex min-h-screen items-center justify-center bg-[#faf8f5] text-sm text-neutral-500"
       >
         Verificando acesso...
       </main>

@@ -128,7 +128,7 @@ export function OrdersScreen() {
       {/* Título + avatar */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold md:text-3xl">
+          <h1 className="text-2xl font-semibold md:text-3xl">
             Pedidos
           </h1>
           <p className="mt-1 text-sm text-neutral-500">
@@ -165,7 +165,7 @@ export function OrdersScreen() {
               "h-7 rounded-full px-3 text-xs",
               filter === key
                 ? "bg-orange-soft font-semibold text-orange hover:bg-orange-soft"
-                : "bg-neutral-200/60 text-neutral-600"
+                : "bg-[#f3efe9] text-neutral-600"
             )}
           >
             {label}
