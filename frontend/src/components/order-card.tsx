@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Eye } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { Order, OrderStatus } from "@/lib/orders";
@@ -42,7 +42,7 @@ export function OrderCard({ order }: OrderCardProps) {
 
       <h2 className="mt-2 text-lg font-semibold">{order.category}</h2>
 
-      <dl className="mt-3 space-y-1.5 text-sm">
+      <dl className="mt-3 mb-4 space-y-1.5 text-sm">
         <div className="flex justify-between gap-3">
           <dt className="shrink-0 text-neutral-500">Destinatário</dt>
           <dd className="text-right font-medium">{order.recipient}</dd>
@@ -62,7 +62,7 @@ export function OrderCard({ order }: OrderCardProps) {
           className="flex items-center gap-1 font-semibold text-orange hover:underline"
         >
           Ver pedido
-          <Eye className="size-4" />
+          <ArrowRight className="size-4" />
         </Link>
       </div>
     </Card>

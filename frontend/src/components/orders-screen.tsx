@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDownWideNarrow, Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { OrderCard } from "@/components/order-card";
-import { orders, type Order } from "@/lib/orders";
+import { getErrorMessage } from "@/lib/auth";
+import { getOrders, type Order } from "@/lib/orders";
 import { cn } from "@/lib/utils";
 
 type Filter = "todos" | "abertos" | "alerta" | "concluidos";
@@ -45,9 +46,35 @@ function matchesFilter(order: Order, filter: Filter) {
 }
 
 export function OrdersScreen() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("abertos");
   const [sortOrder, setSortOrder] = useState<SortOrder>("priority");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getOrders()
+      .then((data) => {
+        if (!cancelled) setOrders(data);
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setLoadError(
+            getErrorMessage(error, "Não foi possível carregar os pedidos."),
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filters: { key: Filter; label: string }[] = [
     {
@@ -68,16 +95,16 @@ export function OrdersScreen() {
   const visible = orders
     .filter((o) => matchesFilter(o, filter))
     .filter((o) =>
-      `${o.id} ${o.category} ${o.recipient}`
+      `${o.code} ${o.category} ${o.recipient}`
         .toLowerCase()
         .includes(query.toLowerCase())
     )
     .sort((a, b) => {
       switch (sortOrder) {
         case "id-ascending":
-          return a.id - b.id;
+          return a.pickupAt - b.pickupAt;
         case "id-descending":
-          return b.id - a.id;
+          return b.pickupAt - a.pickupAt;
         case "completion":
           return (
             Number(b.status === "concluido") -
@@ -105,7 +132,7 @@ export function OrdersScreen() {
             Pedidos
           </h1>
           <p className="mt-1 text-sm text-neutral-500">
-            Sua fila de trabalho
+            Pedidos disponiveis para a coleta
           </p>
         </div>
         <Avatar className="size-10 bg-orange-soft">
@@ -166,11 +193,23 @@ export function OrdersScreen() {
           >
             <option value="priority">Por prioridade</option>
             <option value="completion">Por conclusão</option>
-            <option value="id-ascending">Pedidos crescentes</option>
-            <option value="id-descending">Pedidos decrescentes</option>
+            <option value="id-ascending">Coleta mais cedo</option>
+            <option value="id-descending">Coleta mais tarde</option>
           </select>
         </label>
       </div>
+
+      {/* Carregando / erro */}
+      {loading && (
+        <p className="mt-10 text-center text-sm text-neutral-500">
+          Carregando pedidos...
+        </p>
+      )}
+      {loadError && (
+        <p role="alert" className="mt-10 text-center text-sm text-red-700">
+          {loadError}
+        </p>
+      )}
 
       {/* Lista: 1 coluna no celular, 2 no tablet, 3 no desktop */}
       <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -179,7 +218,7 @@ export function OrdersScreen() {
         ))}
       </div>
 
-      {visible.length === 0 && (
+      {!loading && !loadError && visible.length === 0 && (
         <p className="mt-10 text-center text-sm text-neutral-500">
           Nenhum pedido encontrado.
         </p>
