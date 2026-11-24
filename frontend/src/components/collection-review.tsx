@@ -124,14 +124,16 @@ export function CollectionReview({ order, taskType }: CollectionReviewProps) {
     () =>
       taskTypes
         .filter((type) => {
+          const taskCount = type === "light" ? order.lightTasks : order.heavyTasks;
           const taskStops = getPickingStops(
             type,
-            type === "light" ? order.lightTasks : order.heavyTasks
+            taskCount
           );
           const taskSnapshot = sessionStorage.getItem(
             getCollectionReviewStorageKey(order.id, type)
           );
           return (
+            taskCount === 0 ||
             parseReviewData(taskSnapshot ?? "", taskStops) !== null
           );
         })
@@ -325,7 +327,8 @@ export function CollectionReview({ order, taskType }: CollectionReviewProps) {
       </section>
 
       <div className="sticky bottom-0 -mx-4 mt-auto border-t bg-white px-4 pb-4 pt-3 md:-mx-8 md:px-8">
-        {!completedTaskTypes.includes(otherTaskType) && (
+        {!completedTaskTypes.includes(otherTaskType) &&
+          (otherTaskType === "light" ? order.lightTasks : order.heavyTasks) > 0 && (
           <Button
             type="button"
             variant="outline"

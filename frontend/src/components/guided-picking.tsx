@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  Check,
   History,
   MapPin,
   MessageSquareWarning,
@@ -46,6 +45,12 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
   const [justified, setJustified] = useState<Record<string, string>>({});
   const [showJustify, setShowJustify] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => {
+    if (stops.length === 0) {
+      router.replace(`/tarefas-designadas/${order.id}`);
+    }
+  }, [order.id, router, stops.length]);
 
   const isDone = (index: number) =>
     collected[index] >= stops[index].quantity || stops[index].id in justified;
@@ -109,6 +114,8 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
     .map((stop, index) => ({ stop, units: collected[index] }))
     .filter(({ stop, units }) => units > 0 || stop.id in justified);
 
+  if (stops.length === 0) return null;
+
   return (
     <main className="flex w-full flex-1 flex-col px-4 pt-5 md:px-8 md:pt-8">
       {/* Título */}
@@ -135,7 +142,7 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
         <div className="flex items-center justify-between text-xs">
           <span className="font-semibold">
             {finished
-              ? "Todos os endereços concluídos"
+              ? "Abrindo resumo da coleta..."
               : `Endereço ${currentIndex + 1} de ${stops.length}`}
           </span>
           <span className="text-neutral-500">
@@ -170,18 +177,9 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
       </section>
 
       {finished ? (
-        <Card className="mt-6 items-center gap-3 rounded-2xl p-8 text-center shadow-sm">
-          <span className="flex size-12 items-center justify-center rounded-full bg-orange-soft">
-            <Check className="size-6 text-orange" />
-          </span>
-          <h2 className="text-lg font-semibold">Coleta finalizada</h2>
-          <p className="text-sm text-neutral-500">
-            {collectedUnits} de {totalUnits} unidades coletadas
-            {Object.keys(justified).length > 0 &&
-              ` · ${Object.keys(justified).length} endereço(s) justificado(s)`}
-            .
-          </p>
-        </Card>
+        <p role="status" className="mt-6 text-center text-sm text-neutral-500">
+          Abrindo o resumo da coleta...
+        </p>
       ) : (
         current && (
           <div className="mt-4 space-y-4">
@@ -331,14 +329,7 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
 
       {/* Rodapé fixo */}
       <div className="sticky bottom-0 -mx-4 mt-auto border-t bg-white px-4 pb-4 pt-3 md:-mx-8 md:px-8">
-        {finished ? (
-          <Button
-            asChild
-            className="h-12 w-full rounded-xl bg-orange text-base font-semibold text-white hover:bg-orange/90"
-          >
-            <Link href="/tarefas-designadas">Voltar para pedidos</Link>
-          </Button>
-        ) : (
+        {!finished && (
           <>
             <p className="mb-2 text-center text-xs text-neutral-500">
               Confira o endereço antes de ler o código.

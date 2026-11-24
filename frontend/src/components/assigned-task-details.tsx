@@ -7,11 +7,11 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  Clock3,
+
   Forklift,
   Package,
   PackageOpen,
-  Truck,
+
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -91,7 +91,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             type="button"
             variant="outline"
             aria-pressed={selectedTaskType === "light"}
-            disabled={completed}
+            disabled={completed || order.lightTasks === 0}
             onClick={() => setSelectedTaskType("light")}
             className={`h-auto min-h-28 flex-col items-start justify-between rounded-2xl p-3 text-left whitespace-normal sm:min-h-32 sm:p-4 ${
               selectedTaskType === "light"
@@ -107,7 +107,11 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               <span className="block text-[clamp(1.5rem,4vw,2rem)] font-bold">{order.lightTasks}</span>
               <span className="mt-1 block text-sm font-semibold">Tarefas leves</span>
               <span className="mt-1 block text-xs text-neutral-500">
-                {selectedTaskType === "light" ? "Selecionada" : "Toque para selecionar"}
+                {order.lightTasks === 0
+                  ? "Não é possível selecionar: não existem tarefas."
+                  : selectedTaskType === "light"
+                    ? "Selecionada"
+                    : "Toque para selecionar"}
               </span>
             </span>
           </Button>
@@ -116,7 +120,7 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
             type="button"
             variant="outline"
             aria-pressed={selectedTaskType === "heavy"}
-            disabled={completed}
+            disabled={completed || order.heavyTasks === 0}
             onClick={() => setSelectedTaskType("heavy")}
             className={`h-auto min-h-28 flex-col items-start justify-between rounded-2xl p-3 text-left whitespace-normal sm:min-h-32 sm:p-4 ${
               selectedTaskType === "heavy"
@@ -132,7 +136,11 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
               <span className="block text-[clamp(1.5rem,4vw,2rem)] font-bold">{order.heavyTasks}</span>
               <span className="mt-1 block text-sm font-semibold">Tarefas pesadas</span>
               <span className="mt-1 block text-xs text-neutral-500">
-                {selectedTaskType === "heavy" ? "Selecionada" : "Toque para selecionar"}
+                {order.heavyTasks === 0
+                  ? "Não é possível selecionar: não existem tarefas."
+                  : selectedTaskType === "heavy"
+                    ? "Selecionada"
+                    : "Toque para selecionar"}
               </span>
             </span>
           </Button>
@@ -148,47 +156,52 @@ export function AssignedTaskDetails({ order }: AssignedTaskDetailsProps) {
         )}
 
         <Card className="mt-4 gap-0 rounded-2xl p-3 shadow-sm sm:p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="text-[clamp(1rem,3vw,1.125rem)] font-semibold">Pedido #{order.id}</h3>
-              <p className="mt-1 text-sm text-neutral-500">{order.category}</p>
-            </div>
-            <Badge
-              variant="secondary"
-              className={`shrink-0 ${
-                completed
-                  ? "bg-orange-soft text-orange"
-                  : "bg-muted-bg text-neutral-600"
-              }`}
-            >
-              {statusLabel}
-            </Badge>
-          </div>
+          {selectedTaskType ? (
+            <>
+              {(() => {
+                const items = selectedTaskType === "light" ? order.lightItems : order.heavyItems;
+                const unitCount = selectedTaskType === "light" ? order.lightTasks : order.heavyTasks;
 
-          <dl className="mt-3 space-y-2 border-t pt-3 text-sm sm:mt-4 sm:space-y-3">
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
-              <dt className="min-w-0 text-neutral-500">Destinatário</dt>
-              <dd className="min-w-0 break-words text-right font-medium">{order.recipient}</dd>
-            </div>
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
-              <dt className="min-w-0 text-neutral-500">Total de tarefas / unidades</dt>
-              <dd className="min-w-0 text-right font-medium">{order.units}</dd>
-            </div>
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
-              <dt className="flex min-w-0 items-center gap-1 text-neutral-500">
-                <Truck className="size-4" />
-                Transportadora
-              </dt>
-              <dd className="min-w-0 break-words text-right font-medium">{order.carrier}</dd>
-            </div>
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-3">
-              <dt className="flex min-w-0 items-center gap-1 text-neutral-500">
-                <Clock3 className="size-4" />
-                Horário da coleta
-              </dt>
-              <dd className="min-w-0 text-right font-medium">{order.pickup}</dd>
-            </div>
-          </dl>
+                return (
+                  <>
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-semibold">
+                        Resumo da coleta {selectedTaskType === "light" ? "leve" : "pesada"}
+                      </h3>
+                      <span className="shrink-0 text-xs text-neutral-500">
+                        {items.length} {items.length === 1 ? "item" : "itens"} · {unitCount} un.
+                      </span>
+                    </div>
+                    {items.length === 0 ? (
+                      <p className="mt-3 text-sm text-neutral-500">
+                        Nao existem tarefas neste grupo.
+                      </p>
+                    ) : (
+                      <ul className="mt-3 max-h-56 divide-y overflow-y-auto border-t text-sm">
+                        {items.map((item) => (
+                          <li key={item.id} className="flex items-start justify-between gap-3 py-3">
+                            <span className="min-w-0">
+                              <span className="block break-words font-medium">{item.name}</span>
+                              {item.detail && (
+                                <span className="mt-0.5 block break-words text-xs text-neutral-500">
+                                  {item.detail}
+                                </span>
+                              )}
+                            </span>
+                            <span className="shrink-0 font-semibold">{item.quantity} un.</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                );
+              })()}
+            </>
+          ) : (
+            <p className="py-2 text-sm text-neutral-500">
+              Selecione um grupo para ver os itens da coleta.
+            </p>
+          )}
         </Card>
 
         <Button

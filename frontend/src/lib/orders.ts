@@ -3,6 +3,13 @@ import { enumName, orderStatusNames, productAccessNames } from "@/lib/enums";
 
 export type OrderStatus = "alerta" | "aguardando" | "concluido";
 
+export interface OrderTaskSummary {
+  id: string;
+  name: string;
+  detail: string;
+  quantity: number;
+}
+
 export interface Order {
   id: string; // Guid da API, usado nas rotas e nas chamadas
   code: string; // versão curta, só para exibir
@@ -13,6 +20,8 @@ export interface Order {
   pickupAt: number; // timestamp, usado para ordenar
   lightTasks: number;
   heavyTasks: number;
+  lightItems: OrderTaskSummary[];
+  heavyItems: OrderTaskSummary[];
   units: number;
   status: OrderStatus;
 }
@@ -51,18 +60,45 @@ function formatPickup(iso: string) {
   return minutes === 0 ? `${hours}h` : `${hours}h${String(minutes).padStart(2, "0")}`;
 }
 
+function productAccessName(value: number | string): string {
+  if (typeof value === "number") return productAccessNames[value] ?? "";
+
+  const normalized = value.trim().toUpperCase();
+  if (normalized === "0") return "LIGHT";
+  if (normalized === "1") return "HEAVY";
+  return normalized;
+}
+
 function toOrder(
   order: ApiOrder,
-  accessByProduct: Map<string, string>,
+  productsById: Map<string, ApiProduct>,
 ): Order | null {
   const apiStatus = enumName(orderStatusNames, order.status);
   if (apiStatus === "CANCELED") return null;
 
   let lightTasks = 0;
   let heavyTasks = 0;
-  for (const task of order.tasks) {
-    if (accessByProduct.get(task.productId) === "HEAVY") heavyTasks += task.quantity;
-    else lightTasks += task.quantity;
+  const lightItems: OrderTaskSummary[] = [];
+  const heavyItems: OrderTaskSummary[] = [];
+  for (const task of order.tasks ?? []) {
+    const product = productsById.get(task.productId.toLowerCase());
+    const item: OrderTaskSummary = {
+      id: task.id,
+      name: product?.name || task.description || "Item sem nome",
+      detail:
+        task.description && task.description !== product?.name
+          ? task.description
+          : "",
+      quantity: task.quantity,
+    };
+
+    if (product && productAccessName(product.access) === "HEAVY") {
+      heavyTasks += task.quantity;
+      heavyItems.push(item);
+    } else {
+      lightTasks += task.quantity;
+      lightItems.push(item);
+    }
   }
 
   const pickupAt = new Date(order.dataColeta).getTime();
@@ -80,6 +116,8 @@ function toOrder(
     pickupAt,
     lightTasks,
     heavyTasks,
+    lightItems,
+    heavyItems,
     units: lightTasks + heavyTasks,
     status,
   };
@@ -92,12 +130,32 @@ export async function getOrders(): Promise<Order[]> {
     api.get<ApiProduct[]>("/api/Product"),
   ]);
 
-  const accessByProduct = new Map<string, string>(
-    productsRes.data.map((p) => [p.id, enumName(productAccessNames, p.access)]),
+  const productsById = new Map<string, ApiProduct>(
+    productsRes.data.map((product) => [product.id.toLowerCase(), product]),
   );
 
   return ordersRes.data.flatMap((order) => {
-    const mapped = toOrder(order, accessByProduct);
+    const mapped = toOrder(order, productsById);
     return mapped ? [mapped] : [];
   });
+}
+
+export async function getOrderById(id: string): Promise<Order | null> {
+  const [orderRes, tasksRes, productsRes] = await Promise.all([
+    api.get<ApiOrder>(`/api/Order/${encodeURIComponent(id)}`),
+    api.get<ApiTask[]>(`/api/Order/Tarefas/${encodeURIComponent(id)}`),
+    api.get<ApiProduct[]>("/api/Product"),
+  ]);
+
+  const productsById = new Map<string, ApiProduct>(
+    productsRes.data.map((product) => [
+      product.id.toLowerCase(),
+      product,
+    ]),
+  );
+
+  return toOrder(
+    { ...orderRes.data, tasks: tasksRes.data },
+    productsById,
+  );
 }

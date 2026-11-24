@@ -8,7 +8,7 @@ export interface CollectionReviewData {
 const collectionReviewUpdatedEvent = "smartpick:collection-review-updated";
 
 export function getCollectionReviewStorageKey(
-  orderId: number,
+  orderId: string,
   taskType: TaskType
 ) {
   return `smartpick-review-${orderId}-${taskType}`;
