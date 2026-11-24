@@ -2,13 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { LogOut, Warehouse } from "lucide-react";
-import { clearStoredAuth } from "@/lib/auth-session";
+import { clearSession } from "@/lib/auth-session";
 
 export function AppHeader() {
   const router = useRouter();
 
   function handleLogout() {
-    clearStoredAuth();
+    clearSession();
     router.replace("/login");
   }
 

@@ -102,7 +102,7 @@ export function OrdersScreen() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold md:text-3xl">
-            Tarefas designadas
+            Pedidos
           </h1>
           <p className="mt-1 text-sm text-neutral-500">
             Sua fila de trabalho

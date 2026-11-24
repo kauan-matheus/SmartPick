@@ -56,3 +56,14 @@ export function getStoredAuth(): AuthResponse | null {
 export function clearStoredAuth() {
   sessionStorage.removeItem(authStorageKey);
 }
+
+export function clearSession() {
+  clearStoredAuth();
+
+  const reviewKeys: string[] = [];
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    if (key?.startsWith("smartpick-review-")) reviewKeys.push(key);
+  }
+  reviewKeys.forEach((key) => sessionStorage.removeItem(key));
+}

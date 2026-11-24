@@ -1,5 +1,5 @@
 import axios from "axios";
-import { clearStoredAuth, getStoredAuth } from "@/lib/auth-session";
+import { clearSession, getStoredAuth } from "@/lib/auth-session";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "") ?? "http://localhost:5192",
@@ -17,7 +17,7 @@ api.interceptors.response.use(
   (error) => {
     const isLogin = error.config?.url === "/login";
     if (axios.isAxiosError(error) && error.response?.status === 401 && !isLogin) {
-      clearStoredAuth();
+      clearSession();
       window.location.replace("/login");
     }
     return Promise.reject(error);
