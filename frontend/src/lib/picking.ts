@@ -26,6 +26,34 @@ const lightStops: PickingStop[] = [
   { id: "C1", address: "C1", location: "Corredor C · Posição 1 · Prateleira 1", name: "Batedeiras", detail: "Planetária 5 L · SKU BAT-5L", quantity: 2, requiresForklift: false },
 ];
 
-export function getPickingStops(taskType: TaskType): PickingStop[] {
-  return taskType === "heavy" ? heavyStops : lightStops;
+export function getPickingStops(
+  taskType: TaskType,
+  expectedQuantity: number
+): PickingStop[] {
+  if (!Number.isInteger(expectedQuantity) || expectedQuantity < 0) {
+    throw new RangeError("A quantidade da coleta deve ser um inteiro não negativo.");
+  }
+
+  const stops = taskType === "heavy" ? heavyStops : lightStops;
+  const totalQuantity = stops.reduce((sum, stop) => sum + stop.quantity, 0);
+  const exactQuantities = stops.map(
+    (stop) => (expectedQuantity * stop.quantity) / totalQuantity
+  );
+  const quantities = exactQuantities.map(Math.floor);
+  let remainder =
+    expectedQuantity - quantities.reduce((sum, quantity) => sum + quantity, 0);
+  const remainderOrder = exactQuantities
+    .map((quantity, index) => ({
+      index,
+      fraction: quantity - Math.floor(quantity),
+    }))
+    .sort((a, b) => b.fraction - a.fraction || a.index - b.index);
+
+  for (let index = 0; remainder > 0; index++, remainder--) {
+    quantities[remainderOrder[index % remainderOrder.length].index]++;
+  }
+
+  return stops.flatMap((stop, index) =>
+    quantities[index] > 0 ? [{ ...stop, quantity: quantities[index] }] : []
+  );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Check,
@@ -14,6 +15,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  getCollectionReviewStorageKey,
+  notifyCollectionReviewUpdated,
+  type CollectionReviewData,
+} from "@/lib/collection-session";
 import { getPickingStops, type TaskType } from "@/lib/picking";
 import type { Order } from "@/lib/orders";
 import { cn } from "@/lib/utils";
@@ -30,7 +36,11 @@ const justifyReasons = [
 ];
 
 export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
-  const stops = getPickingStops(taskType);
+  const router = useRouter();
+  const stops = getPickingStops(
+    taskType,
+    taskType === "light" ? order.lightTasks : order.heavyTasks
+  );
 
   const [collected, setCollected] = useState<number[]>(stops.map(() => 0));
   const [justified, setJustified] = useState<Record<string, string>>({});
@@ -47,20 +57,52 @@ export function GuidedPicking({ order, taskType }: GuidedPickingProps) {
   const totalUnits = stops.reduce((sum, stop) => sum + stop.quantity, 0);
   const collectedUnits = collected.reduce((sum, value) => sum + value, 0);
   const taskCode = `${taskType === "heavy" ? "P" : "L"}07`;
+  const reviewStorageKey = getCollectionReviewStorageKey(order.id, taskType);
+
+  function saveAndOpenReview(
+    nextCollected: number[],
+    nextJustified: Record<string, string>
+  ) {
+    const reviewData: CollectionReviewData = {
+      collected: nextCollected,
+      justified: nextJustified,
+    };
+    sessionStorage.setItem(reviewStorageKey, JSON.stringify(reviewData));
+    notifyCollectionReviewUpdated();
+    router.push(`/revisar-coleta/${order.id}?tipo=${taskType}`);
+  }
 
   // TODO(scanner): trocar este incremento pela leitura real do código (câmera/leitor).
   function handleScan() {
     if (!current) return;
-    setCollected((prev) =>
-      prev.map((value, index) => (index === currentIndex ? value + 1 : value))
+    const nextCollected = collected.map((value, index) =>
+      index === currentIndex ? value + 1 : value
     );
+    setCollected(nextCollected);
     setShowJustify(false);
+
+    const willBeFinished = stops.every(
+      (stop, index) =>
+        nextCollected[index] >= stop.quantity || stop.id in justified
+    );
+    if (willBeFinished) {
+      saveAndOpenReview(nextCollected, justified);
+    }
   }
 
   function handleJustify(reason: string) {
     if (!current) return;
-    setJustified((prev) => ({ ...prev, [current.id]: reason }));
+    const nextJustified = { ...justified, [current.id]: reason };
+    setJustified(nextJustified);
     setShowJustify(false);
+
+    const willBeFinished = stops.every(
+      (stop, index) =>
+        collected[index] >= stop.quantity || stop.id in nextJustified
+    );
+    if (willBeFinished) {
+      saveAndOpenReview(collected, nextJustified);
+    }
   }
 
   const historyItems = stops
