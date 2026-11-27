@@ -120,8 +120,8 @@ namespace WarehouseManagementService.Application.Services.Path
                 
                 var result = new ResponsePathDto
                 {
-                    LightTasks = lightTasks.Select(t => t.ToPathDto(lightPickups.First(p => p.ProductId == t.ProductId).Posicao)).ToList(),
-                    HeavyTasks = heavyTasks.Select(t => t.ToPathDto(heavyPickups.First(p => p.ProductId == t.ProductId).Posicao)).ToList()
+                    LightTasks = lightTasks.Select(t => t.ToPathDto(lightPickups.First(p => p.ProductId == t.ProductId).Nome)).ToList(),
+                    HeavyTasks = heavyTasks.Select(t => t.ToPathDto(heavyPickups.First(p => p.ProductId == t.ProductId).Nome)).ToList()
                 };
 
                 return ServiceResponse<ResponsePathDto>.Ok(result);

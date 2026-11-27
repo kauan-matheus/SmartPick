@@ -14,7 +14,7 @@ namespace WarehouseManagementService.Communication.Dto.Responses
         public string Description { get; set; } = string.Empty;
         public StatusEnum Status { get; set; }
         public int Quantity { get; set; }
-        public Ponto Position { get; set; }
+        public string Position { get; set; } = string.Empty;
         public Guid ProductId { get; set; }
     }
 

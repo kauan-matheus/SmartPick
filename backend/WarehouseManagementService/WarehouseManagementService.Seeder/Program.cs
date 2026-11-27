@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WarehouseManagementService.Domain.Interfaces;
 using WarehouseManagementService.Infra.Data.Data;
+using WarehouseManagementService.Infra.Data.UnitOfWork;
 
 var builder = Host.CreateApplicationBuilder(
     new HostApplicationBuilderSettings
@@ -34,6 +36,7 @@ using var host = builder.Build();
 using var scope = host.Services.CreateScope();
 
 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+var unit = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
 
 try
 {

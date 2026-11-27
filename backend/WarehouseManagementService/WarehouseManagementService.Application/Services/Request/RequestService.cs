@@ -46,11 +46,9 @@ namespace WarehouseManagementService.Application.Services.Request
             try
             {
                 var result =  await _repository.ConsultarPorId<RequestModel>(id);
-
-                if (result == null)
-                {
-                    return ServiceResponse<ResponseRequestDto>.BadRequest("Solicitação nao existe");
-                }
+                if (result == null){ return ServiceResponse<ResponseRequestDto>.BadRequest("Solicitação nao existe");}
+                var order = await _repository.ConsultarPorId<OrderModel>(result.OrderId);
+                if (order == null){ return ServiceResponse<ResponseRequestDto>.BadRequest("Solicitação precisa possuir um pedido");}
 
                 return ServiceResponse<ResponseRequestDto>.Ok(result.ToDto());
             }

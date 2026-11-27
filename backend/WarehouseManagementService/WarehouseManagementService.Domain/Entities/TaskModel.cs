@@ -30,7 +30,7 @@ namespace WarehouseManagementService.Domain.Entities
                 ProductId = ProductId
             };
         }
-        public ResponseTaskInPathDto ToPathDto(Ponto position)
+        public ResponseTaskInPathDto ToPathDto(string position)
         {
             return new ResponseTaskInPathDto
             {
